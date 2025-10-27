@@ -1,0 +1,65 @@
+/* src/components/MovieRow.css */
+
+.movieRowContainer {
+  /* Alinha com as margens de 2.5% do Header/Hero */
+  padding: 0 2.5%; 
+  margin-top: 40px; /* Espaço entre o Hero e esta seção */
+  margin-bottom: 40px; /* Espaço para a próxima fileira */
+}
+
+.rowTitle {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 20px;
+  justify-content: center;
+  text-align: center;
+}
+
+.posterListRow {
+  display: flex;
+  gap: 100px; /* Espaço entre os pôsteres */
+  justify-content: center;
+  
+  /* Permite rolar horizontalmente se tiver mais filmes */
+  overflow-x: auto;
+  overflow-y: hidden; /* Esconde a barra de rolagem vertical */
+  padding-bottom: 20px; /* Espaço para a barra de rolagem não cortar o pôster */
+}
+
+/* --- Estilo da Barra de Rolagem (Opcional, mas elegante) --- */
+.posterListRow::-webkit-scrollbar {
+  height: 8px;
+}
+.posterListRow::-webkit-scrollbar-track {
+  background: #222;
+  border-radius: 4px;
+}
+.posterListRow::-webkit-scrollbar-thumb {
+  background: #555;
+  border-radius: 4px;
+}
+.posterListRow::-webkit-scrollbar-thumb:hover {
+  background: #e50914;
+}
+/* --- Fim da Barra de Rolagem --- */
+
+
+.posterItem {
+  /* Definindo o tamanho do pôster */
+  width: 220px; 
+  height: 330px; 
+  /* Se a imagem for de proporção diferente, ela será cortada */
+  object-fit: cover;
+  
+  /* As bordas arredondadas do protótipo */
+  border-radius: 12px; 
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.posterItem:hover {
+  transform: scale(1.05); /* Efeito de zoom */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5); /* Sombra 3D */
+}

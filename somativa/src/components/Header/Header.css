@@ -1,0 +1,131 @@
+/* src/components/Header.css */
+
+.headerNav {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 95%; /* Usa 95% da largura para ter as margens */
+  padding: 20px 2.5%; /* 2.5% de margem em cada lado */
+  display: flex;
+  justify-content: space-between; /* Espaça as 3 seções */
+  align-items: center;
+  z-index: 10;
+}
+
+/* --- Seções do Flexbox --- */
+
+.navLeft {
+  flex: 1; /* Ocupa 1 parte do espaço */
+  display: flex;
+  justify-content: flex-start; /* Alinha à esquerda */
+}
+
+.navCenter {
+  flex: 2; /* Ocupa 2 partes (é mais largo) */
+  display: flex;
+  justify-content: center; /* Centraliza a barra de busca */
+}
+
+.navRight {
+  flex: 1; /* Ocupa 1 parte do espaço */
+  display: flex;
+  justify-content: flex-end; /* Alinha à direita */
+  align-items: center;
+  gap: 30px; /* Espaço entre os links e o botão */
+}
+
+/* --- Elementos --- */
+
+.logo {
+  font-family: 'Poppins', sans-serif; /* Certifique-se de ter importado Poppins */
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: #e50914; /* Cor vermelha do logo */
+  letter-spacing: 1px;
+  cursor: pointer;
+}
+
+/* --- Barra de Busca (Estilo do Protótipo) --- */
+.searchBar {
+  position: relative;
+  width: 100%;
+  max-width: 450px; /* Define uma largura máxima */
+}
+
+.searchInput {
+  width: 100%;
+  padding: 10px 20px 10px 45px; /* Espaço para o ícone à esquerda */
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.9rem;
+  color: white;
+  background-color: rgba(255, 255, 255, 0.1); /* Fundo translúcido */
+  border: 1px solid rgba(255, 255, 255, 0.3); /* Borda sutil */
+  border-radius: 25px; /* Bordas bem arredondadas */
+  outline: none;
+  box-sizing: border-box; /* Garante que o padding não quebre o layout */
+  transition: all 0.3s ease;
+}
+
+.searchInput::placeholder {
+  color: #ccc;
+}
+
+.searchInput:focus {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-color: white;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0.7;
+}
+
+
+/* --- Links de Navegação --- */
+.navLink {
+  font-family: 'Poppins', sans-serif;
+  color: #e0e0e0;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1rem; /* Aumentei um pouco para bater com a imagem */
+  transition: color 0.3s ease;
+  position: relative;
+  padding-bottom: 5px; /* Espaço para a linha */
+}
+
+.navLink:hover {
+  color: white;
+}
+
+/* Linha embaixo do link ativo */
+.navLink.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: white;
+}
+
+
+/* --- Botão de Login --- */
+.loginButton {
+  font-family: 'Poppins', sans-serif;
+  background-color: #e50914;
+  color: white;
+  border: none;
+  border-radius: 8px; /* Borda um pouco menos arredondada */
+  padding: 10px 25px; /* Mais preenchimento */
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.loginButton:hover {
+  background-color: #f40612;
+}

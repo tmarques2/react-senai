@@ -1,0 +1,61 @@
+/* src/components/MovieSelector.css */
+
+.movieSelector {
+  /* REMOVIDO: position: absolute, bottom, left, z-index, width */
+  display: flex;
+  flex-direction: column;
+  /* Alinha este componente (pôsteres + setas) à direita
+     dentro da sua coluna no HeroContent */
+  align-items: flex-end; 
+}
+
+.posterList {
+  display: flex;
+  gap: 15px;
+}
+
+.posterImg {
+  width: 120px; /* Mantém o tamanho */
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.posterImg:hover {
+  transform: scale(1.08);
+  border-color: #aaa;
+}
+
+.posterImg.active {
+  transform: scale(1.15); 
+  border-color: white;
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.6);
+}
+
+/* ESTILOS PARA AS SETAS (NOVOS) */
+.carouselArrows {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px; /* Espaço entre pôsteres e setas */
+}
+
+.arrowButton {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 50%; /* Círculo perfeito */
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.arrowButton:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-color: white;
+}

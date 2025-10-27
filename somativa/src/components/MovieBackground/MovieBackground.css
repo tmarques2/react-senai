@@ -1,0 +1,42 @@
+.backgroundContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.bgImage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center 30%;
+  opacity: 0;
+  transition: opacity 1.2s cubic-bezier(0.7, 0, 0.3, 1);
+}
+
+.bgImage.active {
+  opacity: 1;
+}
+
+.bgOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  /* Gradiente para escurecer a imagem e dar legibilidade */
+  background: linear-gradient(to right, 
+    rgba(0, 0, 0, 0.5) 25%, 
+    rgba(0, 0, 0, 0.1) 70%
+  ), 
+  linear-gradient(to top, 
+    rgba(0, 0, 0, 0.3) 15%, 
+    transparent 40%
+  );
+}

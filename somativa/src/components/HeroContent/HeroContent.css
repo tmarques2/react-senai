@@ -1,0 +1,25 @@
+/* src/components/HeroContent.css */
+
+.heroContentContainer {
+  position: absolute;
+  bottom: 5%; /* Alinha todo o bloco na parte inferior */
+  left: 2.5%;
+  width: 95%;
+  z-index: 10;
+  display: flex;
+  align-items: flex-end; /* Alinha os itens pela base */
+  gap: 30px; /* Espaço entre as colunas */
+}
+
+/* Coluna da Esquerda (Info) */
+.heroInfoColumn {
+  flex: 1; /* Ocupa 1 parte do espaço */
+  /* O tamanho será definido pelo seu conteúdo */
+}
+
+/* Coluna da Direita (Pôsteres) */
+.heroSelectorColumn {
+  flex: 1; /* Ocupa 1 parte do espaço */
+  display: flex;
+  justify-content: flex-end; /* Alinha os pôsteres à direita */
+}
