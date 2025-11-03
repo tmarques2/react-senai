@@ -1,0 +1,104 @@
+/* src/pages/AddMovie/AddMoviePage.css */
+
+/* :root só para referência de cores */
+:root {
+  --primary-red: #E50914;
+  --light-red: #FF4D4D;
+  --input-bg: #333; /* Fundo de input mais escuro */
+  --text-light: #f5f5f5;
+  --text-secondary: #aaa;
+}
+
+.addMoviePage {
+  /* Fundo escuro padrão da sua app */
+  background-color: #0b0a0d; 
+  min-height: calc(100vh - 80px); /* Altura - Header */
+  padding: 40px;
+  color: var(--text-light);
+}
+
+.addMovieFormContainer {
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: #141414; /* Um pouco mais claro que o fundo */
+  padding: 30px 40px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+}
+
+.addMovieFormContainer h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin-bottom: 30px;
+  color: var(--primary-red);
+}
+
+.addMovieForm {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.addMovieForm label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: -10px; /* Gruda a label no input abaixo */
+}
+
+/* Estilos de input e textarea baseados na sua página de Login,
+   mas adaptados para este fundo */
+.addMovieForm input[type="text"],
+.addMovieForm textarea {
+  width: 100%;
+  padding: 14px 20px;
+  border-radius: 8px;
+  border: 1px solid #444;
+  outline: none;
+  font-size: 1rem;
+  background-color: var(--input-bg);
+  color: var(--text-light);
+  box-sizing: border-box;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.addMovieForm input[type="text"]::placeholder,
+.addMovieForm textarea::placeholder {
+  color: #777;
+}
+
+.addMovieForm input[type="text"]:focus,
+.addMovieForm textarea:focus {
+  border-color: var(--primary-red);
+  box-shadow: 0 0 10px rgba(229, 9, 20, 0.3);
+}
+
+.addMovieForm textarea {
+  resize: vertical;
+  font-family: Arial, sans-serif;
+}
+
+/* Botão de submit no estilo da sua app */
+.submitMovieButton {
+  width: 100%;
+  padding: 16px 20px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+  
+  /* Botão vermelho, como o de Login */
+  background: linear-gradient(90deg, var(--primary-red) 0%, var(--light-red) 100%);
+  color: white;
+  box-shadow: 0 4px 10px rgba(229, 9, 20, 0.4);
+  margin-top: 20px;
+}
+
+.submitMovieButton:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}

@@ -1,0 +1,29 @@
+.catalog-background-wrapper {
+  width: 100%;
+  min-height: 100vh;
+  background-size: cover;
+  background-position: center;
+  background-blend-mode: multiply;
+  padding-top: 80px; 
+  box-sizing: border-box;
+}
+
+.catalog-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding-left: 40px;
+  padding-right: 40px;
+  box-sizing: border-box;
+}
+
+.catalog-banner {
+  background-color: #333;
+  height: 40vh;
+  border-radius: 12px;
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: #aaa;
+}

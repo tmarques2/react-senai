@@ -1,0 +1,244 @@
+/* src/pages/Login/LoginPage.css */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700;900&display=swap');
+
+/* --- VARIÁVEIS DE CORES --- */
+:root {
+  --primary-red: #E50914;
+  --light-red: #FF4D4D;
+  --dark-red: #B00710;
+  --text-dark: rgba(0 0 0 / .9); 
+  --text-light: rgba(255 255 255 / .8);
+  --input-bg: rgba(255 255 255 / .2);
+  --input-placeholder: rgba(255 255 255 / .5);
+}
+
+/* ... (h2, form, etc. ... ficam iguais) ... */
+h2 {
+    margin-bottom: 32px;
+    font-size: 60px;
+    text-align: center;
+    font-weight: 500;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* (form button fica igual) */
+form button {
+    width: 400px;
+    box-sizing: border-box;
+    background: linear-gradient(90deg, var(--primary-red) 0%, var(--light-red) 100%);
+    color: white;
+    box-shadow: 0 4px 10px rgba(229, 9, 20, 0.4);
+}
+
+form button:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+}
+
+
+/* --- INPUTS E BOTÕES GERAIS --- */
+
+/* --- AQUI ESTÁ A MUDANÇA --- */
+input {
+    padding: 12px 20px;
+    border-radius: 12px;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    width: 400px;
+    background-color: var(--input-bg);
+    color: var(--text-light);
+
+    /* ADICIONE ESTA LINHA: */
+    box-sizing: border-box; /* Isso faz o padding ser 'para dentro' */
+}
+/* ----------------------------- */
+
+input::placeholder {
+    color: var(--input-placeholder);
+}
+
+/* (O resto do arquivo .css fica exatamente igual) */
+
+button {
+    padding: 12px 20px;
+    border-radius: 12px;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    margin-top: 8px;
+    font-weight: 700;
+    padding: 16px;
+    cursor: pointer;
+    transition: all .3s;
+}
+
+button:hover{
+    transform: translateY(-2px);
+}
+
+p {
+    margin-bottom: 32px;
+    width: 400px;
+    text-align: center;
+    color: var(--text-light);
+}
+
+
+/* --- CONTAINERS --- */
+.containerPaiLogin {
+    width: 100%;
+    
+    /* Mude esta linha: */
+    /* de: min-height: calc(100vh - 80px); */
+    /* para: */
+    min-height: 100vh; 
+    
+    background-color: #14151A;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white; 
+    box-sizing: border-box; /* Boa prática para incluir padding/border */
+}
+
+.card {
+    width: 80%;
+    max-width: 1200px; 
+    height: 90vh;
+    max-height: 700px; 
+    background-color: rgba(255 255 255 / .10);
+    border-radius: 32px;
+    padding: 32px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.esquerda, .direita {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+}
+
+.formLogin, .facaLogin, .formCadastro, .facaCadastro {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* --- BOTÕES SECUNDÁRIOS (Faça Login, Cadastre-se) --- */
+.facaLogin button, .facaCadastro button {
+    background-color: transparent;
+    border: 2px solid var(--text-dark); /* Borda preta */
+    color: var(--text-dark); /* Texto preto */
+    font-weight: 700;
+    padding: 14px 24px;
+    box-shadow: none;
+}
+
+.facaLogin button:hover, .facaCadastro button:hover {
+    background-color: var(--primary-red);
+    border-color: var(--primary-red);
+    color: white;
+}
+
+.facaLogin, .facaCadastro{
+    position: absolute;
+
+    h2, p {
+        color: var(--text-dark);
+        text-shadow: 0px 0px 6px rgba(255, 255, 255, 0.7);
+    }
+}
+
+/* --- IMAGEM DE FUNDO DO CARD --- */
+.card::after{
+    width: 100%;
+    height: 100%;
+    content: "";
+    background-image: var(--fundo-login-url);
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-size: cover;
+    background-position: center;
+    z-index: 0;
+    transition: all .5s; 
+    
+    opacity: 0.5;
+    filter: brightness(1.1);
+}
+
+/* --- LÓGICA DE ANIMAÇÃO (mantida) --- */
+.card.loginActive .facaLogin{
+    opacity: 0;
+    pointer-events: none;
+}
+.card.loginActive .facaCadastro{ 
+    transform: translateX(0);
+    transition: all .3s .3s;
+    opacity: 1;
+}
+.card.loginActive .formLogin{
+    transition: all .3s .3s;
+    opacity: 1;
+}
+.card.loginActive .formCadastro{
+    opacity: 0;
+    pointer-events: none;
+}
+.card.loginActive::after{
+    transform: translateX(50%);
+}
+.card.cadastroActive .facaCadastro{
+    opacity: 0;
+    pointer-events: none;
+}
+.card.cadastroActive .formLogin{
+    opacity: 0;
+    pointer-events: none;
+}
+.card.cadastroActive::after{
+    transform: translateX(-50%);
+}
+.card.cadastroActive .facaLogin{ 
+    transform: translateX(0);
+    transition: all .3s .3s;
+    opacity: 1;
+}
+.card.cadastroActive .formCadastro{
+    transition: all .3s .3s;
+    opacity: 1;
+}
+.facaCadastro{
+    transition: all .3s 0;
+    transform: translateX(200%);
+    opacity: 0;
+}
+.formLogin{
+    opacity: 0;
+    transition: all .3s 0;
+}
+.facaLogin{
+    transition: all .3s 0;
+    transform: translateX(-200%);
+    opacity: 0;
+}
+.formCadastro{
+    opacity: 0;
+    transition: all .3s 0;
+}

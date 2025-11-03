@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import Header from '../../components/Header/Header.jsx'; 
+ 
 import MovieBackground from '../../components/MovieBackground/MovieBackground.jsx';
 import HeroContent from '../../components/HeroContent/HeroContent.jsx';
+import LoadingScreen from '../../components/LoadingScreen/LoadingScreen.jsx';
 
 import './Home.css';
 import MovieRow from '../../components/MovieRow/MovieRow.jsx';
@@ -25,7 +26,7 @@ function HomePage() {
       setTimeout(() => {
         // Em um app real, você faria duas chamadas de API
         resolve({ hero: movieData, featured: featuredData });
-      }, 1500); 
+      }, 500); 
     })
     .then((data) => {
       setHeroMovies(data.hero);
@@ -39,7 +40,7 @@ function HomePage() {
     setActiveIndex(index);
   };
 
-  if (isLoading) return <div className="loadingScreen">Carregando...</div>;
+  if (isLoading) return <LoadingScreen />;
   if (error) return <div className="loadingScreen">Erro: {error}</div>;
   if (heroMovies.length === 0) return <div className="loadingScreen">Nenhum filme encontrado.</div>;
 
@@ -50,7 +51,6 @@ function HomePage() {
       {/* --- Seção Hero (O que já fizemos) --- */}
       <div className="showcaseContainer">
         <MovieBackground movies={heroMovies} activeIndex={activeIndex} />
-        <Header />
         <HeroContent 
           movies={heroMovies}
           activeIndex={activeIndex}

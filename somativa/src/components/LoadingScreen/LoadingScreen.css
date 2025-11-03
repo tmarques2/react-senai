@@ -1,0 +1,51 @@
+/* src/components/LoadingScreen/LoadingScreen.css */
+
+.loading-container {
+  display: flex;
+  flex-direction: column; /* Empilha a logo e o texto */
+  align-items: center;
+  justify-content: center;
+  
+  /* Faz a tela de loading ocupar a tela inteira */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  
+  /* Fundo preto do seu app */
+  background-color: #0b0a0d; 
+  z-index: 9999; /* Garante que fique por cima de tudo */
+}
+
+.loading-logo {
+  height: 80px; /* Ajuste o tamanho da logo como preferir */
+  width: auto;
+  
+  /* --- AQUI ESTÁ A ANIMAÇÃO --- */
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+.loading-text {
+  color: #aaa;
+  margin-top: 20px; /* Espaço entre a logo e o texto */
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 1px;
+}
+
+/* Define a animação "pulse" */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.1); /* Aumenta 10% */
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+}
