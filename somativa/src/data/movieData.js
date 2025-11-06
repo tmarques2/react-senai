@@ -1,4 +1,6 @@
-import batmanPoster from '../assets/images/poster_batman.svg';
+// src/data/movieData.js (VERSÃO CORRETA E FINAL)
+
+import batmanPoster from '../assets/images/poster-batman.jpg';
 import batmanBanner from '../assets/images/banner-batman.jpg';
 
 import matrixPoster from '../assets/images/poster_matrix.svg';
@@ -13,9 +15,11 @@ import dunePoster from '../assets/images/poster-duna.jpg';
 import avengersPoster from '../assets/images/poster-vingadores.jpg';
 import crepusculoPoster from '../assets/images/crepusculo-poster.jpg';
 
+// Este é o carrossel TOP 3 (Hero)
 export const movieData = [
   {
-    id: 1,
+    // Batman agora aponta para o ID 3
+    id: 3, 
     title: "Batman: O Cavaleiro das Trevas",
     description: "Quando a ameaça conhecida como o Coringa emerge de seu passado misterioso, ele causa estragos e caos. O Cavaleiro das Trevas deve aceitar um dos maiores testes psicológicos e físicos de sua capacidade de lutar contra a injustiça.",
     rating: "14",
@@ -24,7 +28,8 @@ export const movieData = [
     backgroundUrl: batmanBanner
   },
   {
-    id: 2,
+    // Malévola agora aponta para o ID 28
+    id: 28, 
     title: "Malévola",
     description: "Uma fada vingativa é levada a amaldiçoar uma princesa recém-nascida, apenas para descobrir que a criança pode ser a única pessoa que pode restaurar a paz em sua terra conturbada.",
     rating: "10",
@@ -33,7 +38,8 @@ export const movieData = [
     backgroundUrl: malevolaBanner
   },
   {
-    id: 3,
+    // Matrix agora aponta para o ID 6
+    id: 6, 
     title: "The Matrix",
     description: "Um hacker de computador aprende com rebeldes misteriosos sobre a verdadeira natureza de sua realidade e seu papel na guerra contra seus controladores.",
     rating: "14",
@@ -43,29 +49,35 @@ export const movieData = [
   }
 ];
 
+// Esta é a fileira "Destaques"
 export const featuredData = [
   {
-    id: 10,
+    // Interestelar aponta para o ID 11
+    id: 11, 
     title: "Interstellar",
     posterUrl: interstellarPoster
   },
   {
-    id: 11,
+    // Coringa aponta para o ID 29
+    id: 29, 
     title: "Coringa",
     posterUrl: jokerPoster
   },
   {
-    id: 12,
+    // Duna aponta para o ID 30
+    id: 30, 
     title: "Duna",
     posterUrl: dunePoster
   },
   {
-    id: 13,
+    // Vingadores aponta para o ID 31
+    id: 31, 
     title: "Vingadores - Ultimato",
     posterUrl: avengersPoster
   },
   {
-    id: 14,
+    // Crepúsculo aponta para o ID 23
+    id: 23, 
     title: "Crepúsculo",
     posterUrl: crepusculoPoster
   }

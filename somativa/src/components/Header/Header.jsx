@@ -1,7 +1,7 @@
-// src/components/Header/Header.jsx
-import React, { useState, useEffect } from 'react'; // 1. Importe os hooks
+// src/components/Header/Header.jsx (CORRIGIDO)
+import React, { useState, useEffect } from 'react';
 import { Search } from 'react-feather';
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom'; // O 'Link' já está aqui
 import './Header.css';
 
 import { FiHome, FiGrid, FiPlusSquare, FiLogIn } from 'react-icons/fi';
@@ -9,13 +9,10 @@ import logoImage from '../../assets/images/logo.png';
 
 function Header() {
   
-  // 2. Crie um estado para 'escutar' a rolagem
   const [isScrolled, setIsScrolled] = useState(false);
 
-  // 3. Adicione o 'escutador' de evento
   useEffect(() => {
     const handleScroll = () => {
-      // Se o usuário rolar mais que 10 pixels, ative o estado
       if (window.scrollY > 10) {
         setIsScrolled(true);
       } else {
@@ -23,29 +20,30 @@ function Header() {
       }
     };
 
-    // Adiciona o 'escutador' quando o componente é montado
     window.addEventListener('scroll', handleScroll);
 
-    // Remove o 'escutador' quando o componente é 'desmontado'
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, []); // O array vazio [] faz isso rodar só uma vez
+  }, []); 
 
-  // 4. Crie a classe dinâmica
   const headerClassName = `headerNav ${isScrolled ? 'scrolled' : ''}`;
 
   return (
-    // 5. Aplique a classe dinâmica na 'nav'
     <nav className={headerClassName}>
       
+      {/* --- ESTA É A CORREÇÃO --- */}
       <div className="navLeft">
-        <img 
-          src={logoImage} 
-          alt="THA3BOX Logo" 
-          className="logo" 
-        />
+        {/* Envolvemos a imagem do logo com o Link apontando para "/" */}
+        <Link to="/"> 
+          <img 
+            src={logoImage} 
+            alt="THA3BOX Logo" 
+            className="logo" 
+          />
+        </Link>
       </div>
+      {/* --- FIM DA CORREÇÃO --- */}
       
       <div className="navCenter">
         <div className="searchBar">

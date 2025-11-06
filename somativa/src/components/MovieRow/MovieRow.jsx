@@ -1,6 +1,6 @@
-// src/components/MovieRow.jsx
-
+// src/components/MovieRow.jsx (CORRIGIDO)
 import React from 'react';
+import { Link } from 'react-router-dom'; // 1. IMPORTAR O LINK
 import './MovieRow.css';
 
 function MovieRow({ title, movies }) {
@@ -13,12 +13,21 @@ function MovieRow({ title, movies }) {
       {/* Lista de Pôsteres */}
       <div className="posterListRow">
         {movies.map((movie) => (
-          <img 
-            key={movie.id} 
-            src={movie.posterUrl} 
-            alt={movie.title} 
-            className="posterItem"
-          />
+          
+          // 2. SUBSTITUÍMOS a <img> por um <Link>
+          <Link 
+            key={movie.id} // A 'key' agora vai no Link
+            to={`/filme/${movie.id}`} // 3. Este é o destino
+            title={movie.title} // Dica para o usuário
+            className="posterItem" // 4. A classe principal agora está no Link
+          >
+            {/* 5. A <img> agora fica DENTRO do Link */}
+            <img 
+              src={movie.posterUrl} 
+              alt={movie.title} 
+              className="posterItemImage" // 6. Damos a ela uma nova classe
+            />
+          </Link>
         ))}
       </div>
 
