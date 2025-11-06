@@ -1,25 +1,76 @@
 /* src/components/MovieGrid/MovieGrid.css */
+
 .movie-grid {
   display: grid;
-  /* Cria colunas responsivas:
-     - Tenta criar colunas de no mínimo 250px
-     - Em telas maiores, cria 4 colunas (1fr)
+  
+  /* --- CORREÇÃO (PARA 4 COLUNAS) --- */
+  /* Força a grade a ter colunas de no MÍNIMO 260px.
+     Na sua tela (que tem 1400px de largura máxima),
+     isso resultará em 4 colunas largas.
   */
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 20px;
-  padding-bottom: 50px;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  
+  gap: 35px; /* Espaçamento entre os filmes */
+  padding: 20px 0;
 }
 
-.movie-card-placeholder {
-  background-color: #333;
+.movie-card {
+  background-color: #2c2c2c;
   border-radius: 8px;
-  /* Força a proporção de poster (2:3) */
-  aspect-ratio: 2 / 3;
-  transition: transform 0.3s ease, box-shadow 0.3s;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
 }
 
-.movie-card-placeholder:hover {
+.movie-card:hover {
   transform: scale(1.05);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
-  cursor: pointer;
+  box-shadow: 0 8px 25px rgba(255, 0, 0, 0.3);
+}
+
+/* --- CORREÇÃO (LINKS AZUIS) --- */
+/*
+  Isto força QUALQUER link <a> dentro do card
+  a NÃO ter sublinhado e a SEMPRE herdar a cor
+  do elemento pai (que é branca).
+*/
+.movie-card a,
+.movie-card a:link,
+.movie-card a:visited,
+.movie-card a:hover,
+.movie-card a:active {
+  text-decoration: none !important; /* FORÇA a remoção do sublinhado */
+  color: inherit !important; /* FORÇA a herança da cor branca */
+}
+
+/* Organiza o link (<a>) para conter o poster e o título */
+.movie-card a {
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* O link ocupa o card inteiro */
+}
+/* --- FIM DAS CORREÇÕES --- */
+
+
+.movie-poster {
+  width: 100%;
+  height: 380px; /* Altura do poster */
+  object-fit: cover;
+  border-bottom: 3px solid #ff0000; /* Borda vermelha */
+}
+
+.movie-title {
+  padding: 15px 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #fff; /* Garante que o texto seja branco */
+  
+  flex-grow: 1; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

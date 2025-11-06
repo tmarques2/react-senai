@@ -1,29 +1,39 @@
+/* src/pages/Catalog/Catalog.css */
+
+/* O 'fundo' da página */
 .catalog-background-wrapper {
   width: 100%;
   min-height: 100vh;
-  background-size: cover;
-  background-position: center;
-  background-blend-mode: multiply;
-  padding-top: 80px; 
-  box-sizing: border-box;
+  background-color: #0d0d0d; /* Cor de fundo escura principal */
+  
+  /* Empurra o conteúdo para baixo, para não ficar atrás da navbar */
+  padding-top: 100px; 
 }
 
+/* O 'container' do conteúdo */
 .catalog-content {
-  max-width: 1400px;
+  width: 100%;
+  
+  /* Define a largura máxima e centraliza */
+  max-width: 1400px; 
   margin: 0 auto;
+  
+  /* Adiciona o espaçamento nas laterais */
   padding-left: 40px;
   padding-right: 40px;
-  box-sizing: border-box;
+  padding-bottom: 40px;
 }
 
+/* O banner no topo da página de catálogo */
 .catalog-banner {
-  background-color: #333;
-  height: 40vh;
-  border-radius: 12px;
-  margin-top: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  color: #aaa;
+  width: 100%;
+  height: 300px; /* Altura do banner (ajuste se precisar) */
+  background-color: #1a1a1a; /* Cor de placeholder do banner */
+  border-radius: 10px;
+  margin-bottom: 30px;
+  
+  /* Você pode adicionar uma imagem de fundo aqui */
+  /* background-image: url('URL_DA_IMAGEM_DO_BANNER'); */
+  background-size: cover;
+  background-position: center;
 }

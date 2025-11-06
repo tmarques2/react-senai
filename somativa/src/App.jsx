@@ -1,35 +1,37 @@
 // src/App.jsx
-import React, { Suspense } from 'react'; // 1. Importe o Suspense
+import React, { Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-// 2. Importe seu componente de layout e a tela de loading
 import MainLayout from './components/MainLayout/MainLayout'; 
 import LoadingScreen from './components/LoadingScreen/LoadingScreen';
 
-// 3. Importe todas as suas páginas usando React.lazy
-//    Isso diz ao React para não carregar o código da página
-//    até que seja necessário.
+// Importe suas páginas com React.lazy
 const HomePage = React.lazy(() => import('./pages/Home/Home'));
 const CatalogPage = React.lazy(() => import('./pages/Catalog/Catalog'));
 const LoginPage = React.lazy(() => import('./pages/Login/LoginPage'));
 const AddMoviePage = React.lazy(() => import('./pages/AddMovie/AddMoviePage'));
+
+// <<< NOVO: Importe a nova página de Detalhes
+const MovieDetailsPage = React.lazy(() => import('./pages/MovieDetails/MovieDetails'));
 
 import './index.css'; 
 
 function App() {
   return (
     <BrowserRouter>
-      {/* 4. Envolva TUDO dentro do <Suspense>
-          O 'fallback' é o que será mostrado durante a troca de página.
-      */}
       <Suspense fallback={<LoadingScreen />}>
         <div className="App">
           <Routes>
-            {/* Rotas com Header */}
+            {/* Rotas com Header (MainLayout) */}
             <Route element={<MainLayout />}>
               <Route path="/" element={<HomePage />} />
               <Route path="/catalogo" element={<CatalogPage />} />
               <Route path="/add-movie" element={<AddMoviePage />} />
+
+              {/* <<< NOVO: Rota dinâmica para os detalhes do filme */}
+              {/* O ':id' é um parâmetro que pegaremos na página */}
+              <Route path="/filme/:id" element={<MovieDetailsPage />} />
+              
             </Route>
             
             {/* Rota sem Header */}
