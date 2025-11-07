@@ -1,45 +1,85 @@
 /* src/components/MovieSelector.css */
 
 .movieSelector {
-  /* REMOVIDO: position: absolute, bottom, left, z-index, width */
   display: flex;
   flex-direction: column;
-  /* Alinha este componente (pôsteres + setas) à direita
-     dentro da sua coluna no HeroContent */
   align-items: flex-end; 
 }
 
+/* ATUALIZADO: 
+  A "janela" agora tem a largura de 3 pôsteres + 2 gaps
+*/
 .posterList {
+  /* (120px * 3) + (15px * 2) = 360 + 30 = 390px */
+  width: 390px;
+  /* Altura aumentada para comportar o pôster escalado (1.15) */
+  height: 210px; 
+  overflow: hidden; 
+  
+  /* Adicionado para centralizar os pôsteres verticalmente */
   display: flex;
-  gap: 15px;
+  align-items: center; 
 }
 
-.posterImg {
-  width: 120px; /* Mantém o tamanho */
-  height: 180px;
-  object-fit: cover;
-  border-radius: 8px;
-  cursor: pointer;
-  border: 2px solid transparent;
+/* O "trilho" que segura os pôsteres */
+.posterTrack {
+  display: flex;
+  gap: 15px;
+  /* A transição agora é no trilho */
   transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-.posterImg:hover {
-  transform: scale(1.08);
-  border-color: #aaa;
+
+/* ATUALIZADO: 
+  Estilo PADRÃO (pequeno e escuro)
+*/
+.posterImg {
+  width: 120px;
+  height: 180px;
+  object-fit: cover;
+
+  cursor: pointer;
+
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  
+  /* Deixa o pôster escuro e menor por padrão */
+  filter: brightness(0.4);
+  transform: scale(0.9);
+  opacity: 0.8;
 }
 
+/* ATUALIZADO: 
+  Estilo .active (claro e grande)
+  (Baseado no seu CSS original)
+*/
 .posterImg.active {
   transform: scale(1.15); 
-  border-color: white;
-  box-shadow: 0 0 25px rgba(255, 255, 255, 0.6);
+
+  
+  /* Traz brilho e cor total de volta */
+  filter: brightness(1); 
+  opacity: 1;
 }
 
-/* ESTILOS PARA AS SETAS (NOVOS) */
+/* Efeito hover (opcional, mas bom) */
+.posterImg:hover {
+  /* No hover, traz um pouco do brilho de volta */
+  filter: brightness(0.8);
+  transform: scale(1);
+}
+
+/* Hover no item que já está ativo */
+.posterImg.active:hover {
+  transform: scale(1.2); /* Aumenta ainda mais */
+  filter: brightness(1);
+}
+
+
+/* Setas (sem alteração) */
 .carouselArrows {
   display: flex;
   gap: 15px;
-  margin-top: 20px; /* Espaço entre pôsteres e setas */
+  margin-top: 20px; 
 }
 
 .arrowButton {
@@ -50,7 +90,7 @@
   justify-content: center;
   background-color: rgba(0, 0, 0, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.4);
-  border-radius: 50%; /* Círculo perfeito */
+  border-radius: 50%;
   cursor: pointer;
   transition: all 0.3s ease;
 }
