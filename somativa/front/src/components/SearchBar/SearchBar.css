@@ -1,0 +1,113 @@
+/* src/components/SearchBar/SearchBar.css */
+
+/* Este wrapper é o âncora para o menu flutuante */
+.searchBar-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.searchBar {
+  display: flex;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.15); 
+  border-radius: 20px;
+  padding: 8px 15px;
+  width: 100%;
+  border: 2px solid transparent;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.searchBar:focus-within {
+  border-color: #E50914; 
+  background-color: rgba(255, 255, 255, 0.2); 
+}
+
+.searchIcon {
+  color: #ccc; 
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.searchInput {
+  background: none;
+  border: none;
+  outline: none; 
+  color: #fff;
+  font-size: 0.9rem;
+  width: 100%;
+}
+
+.searchInput::placeholder {
+  color: #ccc; 
+}
+
+/* --- Estilos do Dropdown --- */
+.search-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: #1a1a1a;
+  border: 1px solid #333;
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  z-index: 1001; 
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.search-suggestions li {
+  padding: 10px 15px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  color: #fff;
+}
+
+/* 👇 ATUALIZAÇÃO AQUI 👇
+  Agora, tanto o :hover quanto a classe .suggestion-active 
+  aplicam o mesmo estilo de destaque.
+*/
+.search-suggestions li:hover,
+.search-suggestions li.suggestion-active {
+  background-color: #333;
+}
+
+.search-suggestions img {
+  width: 40px;
+  height: 60px;
+  object-fit: cover;
+  margin-right: 12px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.search-suggestions span {
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.search-suggestions .searching-notice {
+  color: #888;
+  font-style: italic;
+  text-align: center;
+  padding: 15px;
+}
+
+/* Ícone "X" de limpar */
+.search-clear-icon {
+  color: #ccc;
+  cursor: pointer;
+  margin-left: 8px;
+  transition: color 0.2s ease;
+}
+
+.search-clear-icon:hover {
+  color: #fff;
+}

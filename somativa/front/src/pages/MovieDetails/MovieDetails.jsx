@@ -61,7 +61,7 @@ function MovieDetailsPage() {
 
   // 1. Abre o modal de confirmação
   const handleDeleteClick = () => {
-    setShowModal(true);
+    setShowModal(true); 
     setDeleteError(null); // Limpa erros antigos
   };
 

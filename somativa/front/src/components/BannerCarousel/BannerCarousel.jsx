@@ -2,19 +2,18 @@ import React, { useState, useEffect, useCallback } from 'react';
 import Slider from 'react-slick';
 import './BannerCarousel.css';
 
-// Importe os estilos CSS do slick-carousel
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-// 2. SEUS BANNERS (permanecem os mesmos)
+// banners
 const bannerImages = [
   {
     id: 1,
-    imageUrl: "https://i.pinimg.com/736x/71/e3/d8/71e3d8e53ea730c06b9424341f362bfd.jpg"
+    imageUrl: "https://i.pinimg.com/1200x/51/a7/1c/51a71c289b66efbd4bbd4abc96bd23f2.jpg"
   },
   {
     id: 2,
-    imageUrl: "https://i.pinimg.com/1200x/51/a7/1c/51a71c289b66efbd4bbd4abc96bd23f2.jpg"
+    imageUrl: "https://i.pinimg.com/736x/71/e3/d8/71e3d8e53ea730c06b9424341f362bfd.jpg"
   },
   {
     id: 3,
@@ -26,10 +25,9 @@ const bannerImages = [
   }
 ];
 
-// 3. O COMPONENTE SEM O <style> EMBUTIDO
 const BannerCarousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const autoplaySpeed = 4000;
+  const autoplaySpeed = 5000;
 
   const goToNext = useCallback(() => {
     setCurrentIndex((prevIndex) =>

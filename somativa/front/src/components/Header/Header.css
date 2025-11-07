@@ -3,13 +3,7 @@
 .headerNav {
   display: flex;
   justify-content: space-between;
-  
-  /* 1. CORREÇÃO DE ALINHAMENTO (MANTIDO):
-     'align-items: center' aqui garante que .navLeft, .navCenter,
-     e .navRight fiquem alinhados verticalmente.
-  */
   align-items: center; 
-  
   height: 80px; 
   padding: 0 40px; 
   box-sizing: border-box;
@@ -26,12 +20,9 @@
   background-color: #0b0a0d; 
 }
 
-/* Esta regra é a mais importante para o alinhamento.
-   Garante que o CONTEÚDO de CADA seção esteja centralizado.
-*/
 .navLeft, .navRight, .navCenter {
   display: flex;
-  align-items: center; /* Centraliza o conteúdo (logo, busca, links) */
+  align-items: center;
   gap: 20px;
 }
 
@@ -39,7 +30,7 @@
   flex-grow: 1;
   justify-content: center;
   max-width: 500px;
-  width: 100%; /* Garante que ele ocupe o espaço */
+  width: 100%;
 }
 
 .navRight {
@@ -51,50 +42,10 @@
   display: block; 
 }
 
-/* --- 2. CORREÇÃO DA COR DA BARRA --- */
-.searchBar {
-  display: flex;
-  align-items: center;
-  
-  /* Cor mudada de '#222' para um branco transparente */
-  background-color: rgba(255, 255, 255, 0.15); 
-  
-  border-radius: 20px;
-  padding: 8px 15px;
-  width: 100%;
-  border: 2px solid transparent;
-  
-  /* Adicionamos a transição da cor de fundo */
-  transition: border-color 0.3s ease, background-color 0.3s ease;
-}
-
-.searchBar:focus-within {
-  border-color: #E50914; /* Borda vermelha ao clicar */
-  
-  /* Opcional: Fica um pouco mais claro ao clicar */
-  background-color: rgba(255, 255, 255, 0.2); 
-}
-
-.searchIcon {
-  color: #ccc; /* Cor do ícone um pouco mais clara */
-  margin-right: 10px;
-}
-
-.searchInput {
-  background: none;
-  border: none;
-  outline: none; 
-  color: #fff;
-  font-size: 0.9rem;
-  width: 100%;
-}
-
-.searchInput::placeholder {
-  color: #ccc; /* Cor do placeholder um pouco mais clara */
-}
-
-
-/* --- O RESTO DO CSS FICA IGUAL --- */
+/* TODOS OS ESTILOS .searchBar, .searchInput, .searchIcon, 
+  .searchBar-wrapper, .search-suggestions, .search-clear-icon 
+  FORAM REMOVIDOS DAQUI E MOVIDOS PARA O 'SearchBar.css'
+*/
 
 .navLink,
 .loginButton {

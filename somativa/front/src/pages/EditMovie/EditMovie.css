@@ -1,0 +1,163 @@
+/* src/pages/EditMovie/EditMovie.css */
+
+/* NOVA CLASSE: 
+  Esta é a "página" que segura o formulário.
+  Ela cuida do fundo e do espaçamento.
+*/
+.edit-movie-page {
+  /* Fundo da página (igual ao AddMovie) */
+  background-color: #0b0a0d; 
+  min-height: 100vh;
+  box-sizing: border-box;
+  
+  /* MUDANÇA PRINCIPAL:
+    - 150px no topo (para não pegar na navbar)
+    - 40px nas laterais (para não colar nas bordas)
+    - 40px embaixo
+  */
+  padding: 150px 40px 40px 40px;
+}
+
+/* CLASSE RENOMEADA: 
+  Este é o "card" do formulário.
+  (Era .edit-movie-container)
+*/
+.edit-movie-form-container {
+  /* Define a largura máxima do card */
+  max-width: 1200px; 
+  /* Centraliza o card na página */
+  margin: 0 auto; 
+  
+  background-color: #1a1a1a;
+  border-radius: 8px;
+  color: #f4f4f4;
+  /* Padding interno do card */
+  padding: 30px 40px;
+}
+
+.edit-movie-form-container h1 {
+    color: #e50914; /* Vermelho Netflix */
+    margin-bottom: 0.5rem;
+}
+
+.edit-movie-form-container p {
+    margin-bottom: 1.5rem;
+    color: #aaa;
+}
+
+/* Página de Erro (se o fetch falhar) */
+/* Atualizado para usar a classe da página */
+.edit-movie-page.error-page {
+    text-align: center;
+    padding: 150px 40px; /* Mantém o padding */
+}
+.edit-movie-page.error-page p {
+    color: #e50914;
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+}
+
+/* Formulário de Edição */
+.edit-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Duas colunas */
+    gap: 1.5rem; /* Espaço entre os campos */
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Campo que ocupa a largura total */
+.form-group.full-width {
+    grid-column: 1 / -1; /* Ocupa as duas colunas */
+}
+
+.form-group label {
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #ccc;
+    font-size: 0.9rem;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group input[type="url"],
+.form-group textarea {
+    background-color: #333;
+    border: 1px solid #555;
+    color: #f4f4f4;
+    padding: 0.75rem 1rem;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-family: inherit;
+    box-sizing: border-box; /* Garante padding correto */
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #e50914;
+    box-shadow: 0 0 0 2px rgba(229, 9, 20, 0.3);
+}
+
+.form-group textarea {
+    resize: vertical;
+}
+
+/* Mensagem de Erro do Formulário */
+.form-error-message {
+    grid-column: 1 / -1;
+    background-color: rgba(229, 9, 20, 0.1);
+    border: 1px solid #e50914;
+    color: #f4f4f4;
+    padding: 1rem;
+    border-radius: 4px;
+    text-align: center;
+}
+
+/* Botões de Ação */
+.form-actions {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: flex-end; /* Alinha os botões à direita */
+    gap: 1rem;
+    margin-top: 1rem;
+    border-top: 1px solid #333;
+    padding-top: 1.5rem;
+}
+
+.submit-button,
+.cancel-button {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+}
+
+/* Botão Salvar (Principal) */
+.submit-button {
+    background-color: #e50914;
+    color: #fff;
+}
+.submit-button:disabled {
+    background-color: #555;
+    cursor: not-allowed;
+}
+.submit-button:hover:not(:disabled) {
+    background-color: #f40612;
+}
+
+/* Botão Cancelar (Secundário) */
+.cancel-button {
+    background-color: #555;
+    color: #f4f4f4;
+}
+.cancel-button:hover {
+    background-color: #666;
+}

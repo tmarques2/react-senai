@@ -1,0 +1,294 @@
+/* src/pages/MovieDetails/MovieDetails.css */
+
+.movie-details-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh; /* Ocupa a altura da tela */
+  
+  /* --- MUDANÇA --- */
+  /* Aumenta o padding lateral (laterais) */
+  padding: 120px 60px 40px 60px; 
+  
+  background-color: #0d0d0d;
+  color: #e0e0e0;
+}
+
+.movie-content {
+  border-radius: 10px;
+  padding: 30px;
+  
+  /* --- MUDANÇA --- */
+  /* Aumenta a largura máxima do card (laterais) */
+  max-width: 1280px; 
+  
+  width: 100%;
+  display: flex;
+  flex-direction: column; /* Padrão em mobile: poster em cima */
+  gap: 30px;
+}
+
+/* Em telas de computador (largura > 768px) */
+@media (min-width: 768px) {
+  .movie-content {
+    /* Poster e Infos ficam lado a lado */
+    flex-direction: row; 
+    padding: 40px;
+  }
+}
+
+.movie-poster-wrapper {
+  flex-shrink: 0; /* Impede o poster de encolher */
+  width: 100%; /* Ocupa 100% no mobile */
+  max-width: 500px; /* Limita o tamanho do poster */
+  
+  /* --- MUDANÇA --- */
+  /* Garante centralização em layout de coluna (mobile) */
+  margin: 0 auto; 
+  
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .movie-poster-wrapper {
+    width: 300px; /* Tamanho fixo em telas maiores */
+    /* Remove a margem 'auto' no layout de linha */
+    margin: 0; 
+  }
+}
+
+.movie-poster-wrapper img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+.movie-info {
+  flex-grow: 1; /* Ocupa o espaço restante */
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Espaço entre os itens de texto */
+  
+  /* --- MUDANÇA --- */
+  /* Centraliza o texto no mobile */
+  text-align: center; 
+}
+
+/* --- MUDANÇA --- */
+/* Alinha o texto à esquerda em telas maiores */
+@media (min-width: 768px) {
+  .movie-info {
+    text-align: left;
+  }
+}
+
+
+.movie-info h1 {
+  font-size: 2.5rem;
+  color: #ff0000;
+  font-weight: 700;
+  margin-bottom: 10px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+/* --- ESTILOS PARA OS DADOS DO FILME --- */
+
+.info-item {
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.info-item strong {
+  color: #ff0000; /* Rótulo em vermelho */
+  font-weight: 600;
+  margin-right: 8px; /* Espaço entre o rótulo e o dado */
+}
+
+.info-item span {
+  color: #c0c0c0; /* Texto dos dados em cinza claro */
+}
+
+.sinopse-block {
+  margin-top: 20px;
+}
+
+.sinopse-block h3 {
+  font-size: 1.8rem;
+  color: #ff0000;
+  border-bottom: 2px solid #ff0000;
+  padding-bottom: 5px;
+  display: inline-block;
+  margin-bottom: 15px;
+}
+
+.sinopse-block p {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: #c0c0c0;
+}
+
+/* ==================================================================
+  👇 NOVO: ESTILOS ADICIONADOS PARA BOTÕES E MODAL 👇
+==================================================================
+*/
+
+/* --- BOTÕES DE AÇÃO (EDITAR/REMOVER) --- */
+.action-buttons {
+  display: flex;
+  gap: 15px;
+  margin-top: 30px;
+  
+  /* Alinha no centro em mobile (baseado no .movie-info) */
+  justify-content: center; 
+}
+
+/* Alinha à esquerda em desktop */
+@media (min-width: 768px) {
+  .action-buttons {
+    justify-content: flex-start;
+  }
+}
+
+.edit-button,
+.delete-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  text-decoration: none;
+  display: inline-block;
+}
+
+/* Botão de Edição (Secundário) */
+.edit-button {
+  background-color: #555;
+  color: #fff;
+}
+.edit-button:hover {
+  background-color: #666;
+}
+
+/* Botão de Remoção (Perigo) */
+.delete-button {
+  background-color: #aa0000; /* Vermelho escuro */
+  color: #fff;
+}
+.delete-button:hover {
+  background-color: #ff0000; /* Vermelho vivo */
+}
+
+
+/* --- LINK DE VOLTAR --- */
+.back-link {
+  display: inline-block;
+  margin-top: 25px;
+  color: #aaa;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: color 0.2s;
+}
+.back-link:hover {
+  color: #ff0000;
+  text-decoration: underline;
+}
+
+
+/* --- MODAL DE CONFIRMAÇÃO --- */
+.modal-overlay {
+  position: fixed; /* Fica por cima de tudo */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.85); /* Fundo escuro */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: #141414; /* Cor de fundo do modal */
+  padding: 30px 40px;
+  border-radius: 8px;
+  max-width: 500px;
+  width: 90%;
+  border-top: 4px solid #ff0000; /* Destaque vermelho no topo */
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+  
+  /* Alinha o texto do modal à esquerda */
+  text-align: left; 
+}
+
+.modal-content h2 {
+  font-size: 1.8rem;
+  color: #fff;
+  margin-bottom: 15px;
+}
+
+.modal-content p {
+  font-size: 1.1rem;
+  color: #ccc;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+/* Mensagem de erro dentro do modal */
+.modal-error {
+  background-color: rgba(255, 0, 0, 0.1);
+  border: 1px solid #ff0000;
+  color: #fff;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end; /* Botões à direita */
+  gap: 15px;
+  margin-top: 30px;
+}
+
+/* Estilo base para botões do modal */
+.modal-button {
+  padding: 10px 25px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Botão de Cancelar (Secundário) */
+.modal-button.cancel {
+  background-color: #666;
+  color: #fff;
+}
+.modal-button.cancel:hover {
+  background-color: #777;
+}
+
+/* Botão de Confirmar (Primário/Perigo) */
+.modal-button.confirm {
+  background-color: #ff0000;
+  color: #fff;
+}
+.modal-button.confirm:hover {
+  background-color: #aa0000;
+}
+
+/* Estilo 'disabled' (enquanto está removendo) */
+.modal-button:disabled {
+    background-color: #444;
+    color: #888;
+    cursor: not-allowed;
+}

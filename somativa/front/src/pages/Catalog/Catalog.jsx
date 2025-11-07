@@ -1,5 +1,7 @@
 // src/pages/Catalog/Catalog.jsx
 import React, { useState, useEffect } from 'react';
+// 👇 1. Importe o useSearchParams
+import { useSearchParams } from 'react-router-dom';
 import GenreFilter from '../../components/GenreFilter/GenreFilter.jsx';
 import MovieGrid from '../../components/MovieGrid/MovieGrid.jsx';
 import './Catalog.css';
@@ -7,28 +9,42 @@ import LoadingScreen from '../../components/LoadingScreen/LoadingScreen.jsx';
 import BannerCarousel from '../../components/BannerCarousel/BannerCarousel.jsx';
 
 function CatalogPage() {
-  // Estados da página
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  
-  // Estados para o filtro
-  const [allMovies, setAllMovies] = useState([]); // Guarda TODOS os filmes
-  const [selectedGenre, setSelectedGenre] = useState('Todos'); // Guarda o gênero ativo
-  const [filteredMovies, setFilteredMovies] = useState([]); // Guarda os filmes para exibir
+  const [allMovies, setAllMovies] = useState([]);
+  const [selectedGenre, setSelectedGenre] = useState('Todos');
+  const [filteredMovies, setFilteredMovies] = useState([]);
 
-  // Efeito para buscar os filmes da API (só roda 1 vez)
+  // 👇 2. Hook para ler os parâmetros da URL
+  const [searchParams] = useSearchParams();
+  // Pega o valor de "?search=..."
+  const searchTerm = searchParams.get('search');
+
+  // Efeito para buscar os filmes da API
+  // 👇 3. Adicione 'searchTerm' como dependência
   useEffect(() => {
     const fetchMovies = async () => {
+      setIsLoading(true); // Mostra o loading a cada nova busca
+      setError(null);
+      
+      // Constrói a URL base
+      let url = 'http://localhost:8000/listarfilmes';
+
+      // 👇 4. Se houver um termo de busca, adiciona à URL
+      if (searchTerm) {
+        url += `?search=${encodeURIComponent(searchTerm)}`;
+      }
+
       try {
-        const response = await fetch('http://localhost:8000/listarfilmes');
+        const response = await fetch(url);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        // Guarda na lista completa
         setAllMovies(data); 
       } catch (e) {
         setError(e.message);
+        setAllMovies([]); // Limpa os filmes em caso de erro
         console.error("Erro ao buscar filmes:", e);
       } finally {
         setIsLoading(false);
@@ -36,62 +52,61 @@ function CatalogPage() {
     };
 
     fetchMovies();
-  }, []); // [] = Roda só no "mount"
+  }, [searchTerm]); // Roda sempre que o termo de busca na URL mudar
 
-  // --- EFEITO DE FILTRAGEM (COM CORREÇÃO) ---
-  // Roda sempre que o 'selectedGenre' ou 'allMovies' mudar
+  
+  // Efeito de Filtragem (Lado do Cliente)
+  // (Este código continua funcionando perfeitamente)
   useEffect(() => {
-    
-    // Se for "Todos", a lista filtrada é a lista completa
     if (selectedGenre === 'Todos') {
       setFilteredMovies(allMovies);
     } else {
-      // Se for outro gênero, filtre a lista 'allMovies'
       const filtered = allMovies.filter(movie => {
-        // 1. Verifique se o filme sequer tem gêneros
         if (!movie.generos) {
           return false; 
         }
-
-        // 2. LÓGICA ROBUSTA:
-        //    - split(',') -> divide por vírgula, não importa se tem espaço
-        //    - .map(g => g.trim()) -> remove espaços em branco de cada item
         const genresArray = movie.generos.split(',').map(g => g.trim());
-        
-        // 3. Verifique se o gênero selecionado está no array limpo
         return genresArray.includes(selectedGenre);
       });
-      
-      // Atualiza a lista de filmes exibidos
       setFilteredMovies(filtered);
     }
-  }, [selectedGenre, allMovies]); // Dependências: rode se 'selectedGenre' ou 'allMovies' mudar
-  // --- FIM DO EFEITO DE FILTRAGEM ---
+  }, [selectedGenre, allMovies]);
 
 
   if (isLoading) {
     return <LoadingScreen />;
   }
-
+  
+  // 👇 5. Mensagem customizada se a busca não retornar nada
   if (error) {
     return <div className="error-message">Erro ao carregar filmes: {error}</div>;
   }
+  
+  // Se não estiver carregando, não houver erro, mas a lista estiver vazia
+  const noResults = !isLoading && !error && filteredMovies.length === 0;
 
-  // O Return agora usa os novos estados
   return (
     <div className="catalog-background-wrapper">
       <div className="catalog-content">
         
         <BannerCarousel />
 
-        {/* Passamos o estado e a função para o filtro */}
         <GenreFilter
           activeGenre={selectedGenre}
           onSelectGenre={setSelectedGenre}
         />
 
-        {/* Passamos a lista JÁ FILTRADA para o Grid */}
-        <MovieGrid movies={filteredMovies} />
+        {/* 👇 6. Lógica para exibir "Nenhum resultado" */}
+        {noResults ? (
+          <div className="no-results-message">
+            {searchTerm ? 
+              `Nenhum filme encontrado para "${searchTerm}".` : 
+              'Nenhum filme encontrado.'
+            }
+          </div>
+        ) : (
+          <MovieGrid movies={filteredMovies} />
+        )}
       
       </div>
     </div>

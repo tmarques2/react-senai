@@ -5,14 +5,13 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import MainLayout from './components/MainLayout/MainLayout'; 
 import LoadingScreen from './components/LoadingScreen/LoadingScreen';
 
-// Importe suas páginas com React.lazy
+
 const HomePage = React.lazy(() => import('./pages/Home/Home'));
 const CatalogPage = React.lazy(() => import('./pages/Catalog/Catalog'));
 const LoginPage = React.lazy(() => import('./pages/Login/LoginPage'));
 const AddMoviePage = React.lazy(() => import('./pages/AddMovie/AddMoviePage'));
-
-// <<< NOVO: Importe a nova página de Detalhes
 const MovieDetailsPage = React.lazy(() => import('./pages/MovieDetails/MovieDetails'));
+const EditMoviePage = React.lazy(() => import('./pages/EditMovie/EditMovie'));
 
 import './index.css'; 
 
@@ -27,10 +26,11 @@ function App() {
               <Route path="/" element={<HomePage />} />
               <Route path="/catalogo" element={<CatalogPage />} />
               <Route path="/add-movie" element={<AddMoviePage />} />
-
-              {/* <<< NOVO: Rota dinâmica para os detalhes do filme */}
-              {/* O ':id' é um parâmetro que pegaremos na página */}
+              
               <Route path="/filme/:id" element={<MovieDetailsPage />} />
+              
+              {/* <<< NOVO: 2. Adicione a rota de edição */}
+              <Route path="/editar/:id" element={<EditMoviePage />} />
               
             </Route>
             

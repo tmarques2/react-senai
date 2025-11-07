@@ -1,14 +1,18 @@
-// src/components/Header/Header.jsx (CORRIGIDO)
+// src/components/Header/Header.jsx
 import React, { useState, useEffect } from 'react';
-import { Search } from 'react-feather';
-import { NavLink, Link } from 'react-router-dom'; // O 'Link' já está aqui
+import { NavLink, Link } from 'react-router-dom';
 import './Header.css';
+
+// 1. Importe o novo componente
+// (Ajuste o caminho se sua pasta se chamar diferente)
+import SearchBar from '../SearchBar/SearchBar'; 
 
 import { FiHome, FiGrid, FiPlusSquare, FiLogIn } from 'react-icons/fi';
 import logoImage from '../../assets/images/logo.png';
 
 function Header() {
   
+  // A lógica de scroll permanece aqui
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -19,9 +23,7 @@ function Header() {
         setIsScrolled(false);
       }
     };
-
     window.addEventListener('scroll', handleScroll);
-
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
@@ -29,12 +31,12 @@ function Header() {
 
   const headerClassName = `headerNav ${isScrolled ? 'scrolled' : ''}`;
 
+  // 2. Toda a lógica de busca (estados, efeitos, funções) foi REMOVIDA daqui
+
   return (
     <nav className={headerClassName}>
       
-      {/* --- ESTA É A CORREÇÃO --- */}
       <div className="navLeft">
-        {/* Envolvemos a imagem do logo com o Link apontando para "/" */}
         <Link to="/"> 
           <img 
             src={logoImage} 
@@ -43,13 +45,10 @@ function Header() {
           />
         </Link>
       </div>
-      {/* --- FIM DA CORREÇÃO --- */}
       
+      {/* 3. O navCenter agora apenas renderiza o componente SearchBar */}
       <div className="navCenter">
-        <div className="searchBar">
-          <Search color="#fff" size={20} className="searchIcon" />
-          <input type="text" placeholder="Buscar filmes" className="searchInput" />
-        </div>
+        <SearchBar />
       </div>
       
       <div className="navRight">

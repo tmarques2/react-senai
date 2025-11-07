@@ -19,7 +19,7 @@
 
 .posterListRow {
  display: flex;
- gap: 100px; /* Espaço entre os pôsteres */
+ gap: 80px; /* Espaço entre os pôsteres */
  justify-content: center;
  
  /* Permite rolar horizontalmente se tiver mais filmes */

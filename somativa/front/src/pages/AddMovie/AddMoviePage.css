@@ -13,12 +13,21 @@
   /* Fundo escuro padrão da sua app */
   background-color: #0b0a0d; 
   min-height: calc(100vh - 80px); /* Altura - Header */
-  padding: 40px;
+  
+  /* --- MUDANÇA AQUI --- */
+  /* Aumenta o padding-top para 120px para descer da navbar */
+  /* Mantém 40px nas laterais e 40px embaixo */
+  padding: 120px 40px 40px 40px;
+  
   color: var(--text-light);
+  box-sizing: border-box; /* Garante que o padding não estoure */
 }
 
 .addMovieFormContainer {
-  max-width: 800px;
+  /* --- MUDANÇA AQUI --- */
+  /* Aumenta a largura máxima para o container */
+  max-width: 1300px; 
+  
   margin: 0 auto;
   background-color: #141414; /* Um pouco mais claro que o fundo */
   padding: 30px 40px;
@@ -35,21 +44,34 @@
 }
 
 .addMovieForm {
+  display: grid; /* Alterado de flex para grid */
+  grid-template-columns: 1fr 1fr; /* Cria duas colunas iguais */
+  gap: 25px; /* Espaço entre os campos */
+}
+
+/* NOVO: Grupo de formulário (label + input) */
+.form-group {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 8px; /* Espaço entre a label e o input */
+}
+
+/* NOVO: Classe para campos de largura total */
+.form-group-full {
+  grid-column: 1 / -1; /* Ocupa as duas colunas */
 }
 
 .addMovieForm label {
   font-size: 0.9rem;
   font-weight: 600;
   color: var(--text-secondary);
-  margin-bottom: -10px; /* Gruda a label no input abaixo */
+  margin-bottom: 0; /* Remove a margem negativa anterior */
 }
 
 /* Estilos de input e textarea baseados na sua página de Login,
    mas adaptados para este fundo */
 .addMovieForm input[type="text"],
+.addMovieForm input[type="number"],
 .addMovieForm textarea {
   width: 100%;
   padding: 14px 20px;
@@ -64,11 +86,13 @@
 }
 
 .addMovieForm input[type="text"]::placeholder,
+.addMovieForm input[type="number"]::placeholder,
 .addMovieForm textarea::placeholder {
   color: #777;
 }
 
 .addMovieForm input[type="text"]:focus,
+.addMovieForm input[type="number"]:focus,
 .addMovieForm textarea:focus {
   border-color: var(--primary-red);
   box-shadow: 0 0 10px rgba(229, 9, 20, 0.3);
@@ -95,10 +119,41 @@
   background: linear-gradient(90deg, var(--primary-red) 0%, var(--light-red) 100%);
   color: white;
   box-shadow: 0 4px 10px rgba(229, 9, 20, 0.4);
-  margin-top: 20px;
+  margin-top: 10px; /* O margin-top agora é controlado pelo 'gap' do grid ou pelo 'form-group' */
 }
 
 .submitMovieButton:hover {
   transform: translateY(-2px);
   opacity: 0.9;
+}
+
+/* --- NOVO: Estilos para Mensagens de Feedback --- */
+.form-message {
+  padding: 15px;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 500;
+  margin-top: 10px;
+  margin-bottom: 10px; /* Adiciona espaço antes do botão */
+}
+
+.error-message {
+  background-color: #ff4d4d20;
+  border: 1px solid var(--light-red);
+  color: #ffc2c2;
+}
+
+.success-message {
+  background-color: #4CAF5020;
+  border: 1px solid #4CAF50;
+  color: #c8e6c9;
+}
+
+/* --- NOVO: Estilo do botão desabilitado --- */
+.submitMovieButton:disabled {
+  background: #555;
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
+  opacity: 0.7;
 }

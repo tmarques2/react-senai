@@ -1,6 +1,5 @@
-// src/components/MovieRow.jsx (CORRIGIDO)
 import React from 'react';
-import { Link } from 'react-router-dom'; // 1. IMPORTAR O LINK
+import { Link } from 'react-router-dom';
 import './MovieRow.css';
 
 function MovieRow({ title, movies }) {
