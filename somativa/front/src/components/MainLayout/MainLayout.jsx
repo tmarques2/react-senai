@@ -1,18 +1,22 @@
 // src/components/MainLayout/MainLayout.jsx
 import React from 'react';
 import { Outlet } from 'react-router-dom';
-import Header from '../Header/Header'; // Caminho para o seu header
+import Header from '../Header/Header'; 
+// 1. Importe o Footer
+import Footer from '../Footer/Footer'; 
 
 function MainLayout() {
   return (
     <>
       <Header />
       
-      {/* O <Outlet /> é onde as páginas (Home, Catálogo) 
-          serão renderizadas */}
+      {/* O <Outlet /> renderiza suas páginas */}
       <main>
         <Outlet />
       </main>
+      
+      {/* 2. Adicione o Footer aqui */}
+      <Footer />
     </>
   );
 }
