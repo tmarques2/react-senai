@@ -1,27 +1,25 @@
 // src/components/Header/Header.jsx
 import React, { useState, useEffect } from 'react';
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink, Link, useNavigate } from 'react-router-dom'; // 1. Importar useNavigate
 import './Header.css';
 
-// 1. Importe o novo componente
-// (Ajuste o caminho se sua pasta se chamar diferente)
 import SearchBar from '../SearchBar/SearchBar'; 
 
-import { FiHome, FiGrid, FiPlusSquare, FiLogIn } from 'react-icons/fi';
+// 2. Importar os ícones necessários e o useAuth
+import { FiHome, FiGrid, FiPlusSquare, FiLogIn, FiLogOut, FiShield } from 'react-icons/fi';
 import logoImage from '../../assets/images/logo.png';
+import { useAuth } from '../../context/AuthContext'; // 3. Importar useAuth
 
 function Header() {
-  
-  // A lógica de scroll permanece aqui
   const [isScrolled, setIsScrolled] = useState(false);
+  
+  // 4. Pegar dados do usuário e funções de auth
+  const { user, isAdmin, logout } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 10) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
+      setIsScrolled(window.scrollY > 10);
     };
     window.addEventListener('scroll', handleScroll);
     return () => {
@@ -29,9 +27,13 @@ function Header() {
     };
   }, []); 
 
-  const headerClassName = `headerNav ${isScrolled ? 'scrolled' : ''}`;
+  // 5. Criar função de Logout
+  const handleLogout = () => {
+    logout();
+    navigate('/'); // Volta para home após o logout
+  };
 
-  // 2. Toda a lógica de busca (estados, efeitos, funções) foi REMOVIDA daqui
+  const headerClassName = `headerNav ${isScrolled ? 'scrolled' : ''}`;
 
   return (
     <nav className={headerClassName}>
@@ -46,13 +48,30 @@ function Header() {
         </Link>
       </div>
       
-      {/* 3. O navCenter agora apenas renderiza o componente SearchBar */}
       <div className="navCenter">
         <SearchBar />
       </div>
       
+      {/* 6. --- LÓGICA DO NAV-RIGHT ATUALIZADA --- */}
       <div className="navRight">
         
+        {/* Mostra o ícone de status (Admin/Usuário) */}
+        {user && (
+          <div className={`userIndicator ${isAdmin() ? 'admin' : 'user'}`}>
+            {isAdmin() ? (
+              <>
+                <FiShield size={18} />
+                <span>Admin</span>
+              </>
+            ) : (
+              <>
+                👤
+                <span>Usuário</span>
+              </>
+            )}
+          </div>
+        )}
+
         <NavLink 
           to="/" 
           className={({ isActive }) => isActive ? 'navLink active' : 'navLink'}
@@ -69,20 +88,42 @@ function Header() {
           <span>Catálogo</span>
         </NavLink>
         
-        <NavLink 
-          to="/add-movie"
-          className={({ isActive }) => isActive ? 'navLink active' : 'navLink'}
-        >
-          <FiPlusSquare size={18} />
-          <span>Adicionar Filme</span>
-        </NavLink>
-        
-        <Link to="/login" className="loginButton">
-          <FiLogIn size={18} />
-          <span>Login</span>
-        </Link>
-      </div>
+        {/* Mostra "Adicionar Filme" APENAS se estiver logado */}
+        {user && (
+          <NavLink 
+            to="/add-movie"
+            className={({ isActive }) => isActive ? 'navLink active' : 'navLink'}
+          >
+            <FiPlusSquare size={18} />
+            <span>Adicionar Filme</span>
+          </NavLink>
+        )}
 
+        {/* Mostra "Dashboard" APENAS se for admin */}
+        {isAdmin() && (
+          <NavLink 
+            to="/admin/dashboard"
+            className={({ isActive }) => isActive ? 'navLink active adminDashboardLink' : 'navLink adminDashboardLink'}
+          >
+            <FiShield size={18} />
+            <span>Dashboard</span>
+          </NavLink>
+        )}
+        
+        {/* Mostra "Login" OU "Logout" */}
+        {user ? (
+          <button onClick={handleLogout} className="logoutButton">
+            <FiLogOut size={18} />
+            <span>Logout</span>
+          </button>
+        ) : (
+          <Link to="/login" className="loginButton">
+            <FiLogIn size={18} />
+            <span>Login</span>
+          </Link>
+        )}
+
+      </div>
     </nav>
   );
 }

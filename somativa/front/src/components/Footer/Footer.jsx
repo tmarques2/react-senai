@@ -26,17 +26,14 @@ function Footer() {
           <div className="footer-column">
             <Link to="/">Sobre Nós</Link>
             <Link to="/">Carreiras</Link>
-            <Link to="/">Imprensa</Link>
           </div>
           <div className="footer-column">
             <Link to="/">Termos de Uso</Link>
             <Link to="/">Privacidade</Link>
-            <Link to="/">Avisos Legais</Link>
           </div>
           <div className="footer-column">
             <Link to="/">Central de Ajuda</Link>
             <Link to="/">Contato</Link>
-            <Link to="/">Preferências</Link>
           </div>
         </div>
 

@@ -20,21 +20,32 @@
   background-color: #0b0a0d; 
 }
 
-.navLeft, .navRight, .navCenter {
+/* --- DIVISÕES PRINCIPAIS --- */
+
+.navLeft {
   display: flex;
   align-items: center;
-  gap: 20px;
+  flex-shrink: 0; /* <<< IMPORTANTE: Não deixa o logo encolher */
+  min-width: 150px; /* Garante espaço para o logo */
 }
 
 .navCenter {
-  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  flex-grow: 1; /* <<< IMPORTANTE: Faz ocupar o espaço que sobra */
   justify-content: center;
-  max-width: 500px;
-  width: 100%;
+  max-width: 500px; /* Limite máximo da barra */
+  min-width: 200px; /* Limite mínimo */
+  padding: 0 20px; /* Garante que não cola nos lados */
 }
 
 .navRight {
-  justify-content: flex-end; 
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 20px;
+  flex-shrink: 0; /* <<< IMPORTANTE: Não deixa os links encolherem */
+  min-width: 150px; /* Garante espaço para os links */
 }
 
 .logo {
@@ -42,13 +53,9 @@
   display: block; 
 }
 
-/* TODOS OS ESTILOS .searchBar, .searchInput, .searchIcon, 
-  .searchBar-wrapper, .search-suggestions, .search-clear-icon 
-  FORAM REMOVIDOS DAQUI E MOVIDOS PARA O 'SearchBar.css'
-*/
+/* --- LINKS DE NAVEGAÇÃO --- */
 
-.navLink,
-.loginButton {
+.navLink {
   display: flex;
   align-items: center;
   gap: 8px; 
@@ -56,13 +63,11 @@
   font-size: 1rem;
   font-weight: 600;
   transition: color 0.3s;
-}
-
-.navLink {
   color: #aaa; 
   padding: 8px 0; 
   background: none;
   border: none;
+  white-space: nowrap; /* Impede que o texto quebre */
 }
 
 .navLink:hover {
@@ -84,8 +89,50 @@
   background-color: white;
 }
 
-.loginButton {
+/* --- ELEMENTOS DE AUTH --- */
+
+.userIndicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  white-space: nowrap;
+}
+
+.userIndicator.user {
+  background-color: #333;
+  color: #fff;
+}
+
+.userIndicator.admin {
   background-color: #E50914;
+  color: #fff;
+}
+
+.adminDashboardLink {
+  color: #f0ad4e !important;
+}
+.adminDashboardLink:hover {
+  color: #fff !important;
+}
+.adminDashboardLink.active {
+  color: #fff !important;
+}
+.adminDashboardLink.active::after {
+  background-color: #f0ad4e !important;
+}
+
+.loginButton,
+.logoutButton {
+  display: flex;
+  align-items: center;
+  gap: 8px; 
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 600;
   color: white;
   padding: 10px 20px; 
   border-radius: 6px;
@@ -93,9 +140,19 @@
   cursor: pointer;
   margin-left: 10px; 
   transition: background-color 0.3s ease;
+  white-space: nowrap;
 }
 
+.loginButton {
+  background-color: #E50914;
+}
 .loginButton:hover {
   background-color: #B00710; 
-  color: white;
+}
+
+.logoutButton {
+  background-color: #555;
+}
+.logoutButton:hover {
+  background-color: #777;
 }

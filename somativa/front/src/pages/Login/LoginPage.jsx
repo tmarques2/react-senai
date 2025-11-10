@@ -1,36 +1,77 @@
 // src/pages/Login/LoginPage.jsx
-import React, { useState, useEffect } from 'react'; // 1. Importe useEffect
+import React, { useState, useEffect } from 'react';
 import './LoginPage.css';
 import fundoLogin from '../../assets/images/fundo_login.svg?url';
-
-// 2. Importe a tela de loading
 import LoadingScreen from '../../components/LoadingScreen/LoadingScreen.jsx';
+
+// --- NOVOS IMPORTS ---
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext.jsx';
+// --- FIM DOS NOVOS IMPORTS ---
 
 function LoginPage() {
   const [isLoginActive, setIsLoginActive] = useState(true);
-  
-  // 3. Adicione o estado de loading
   const [isLoading, setIsLoading] = useState(true);
+  
+  // --- ADICIONAR ESTES STATES ---
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
+  const [error, setError] = useState('');
+  
+  const { login } = useAuth();
+  const navigate = useNavigate();
+  // --- FIM DOS NOVOS STATES ---
 
-  // 4. Adicione o timer artificial
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 500); // 1.5 segundos
-
+    }, 500); 
     return () => clearTimeout(timer);
   }, []);
 
+  // --- NOVA FUNÇÃO DE LOGIN ---
+  const handleLoginSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+
+    try {
+      const response = await fetch('http://localhost:8081/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, senha }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Erro ao fazer login');
+      }
+
+      // Login bem-sucedido!
+      login(data.user, data.token);
+      
+      // Se for admin, vai para o dashboard. Se não, vai para a home.
+      if (data.user.tipo === 'admin') {
+        navigate('/admin/dashboard');
+      } else {
+        navigate('/'); // Redireciona para a Home
+      }
+
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+  // --- FIM DA NOVA FUNÇÃO ---
+
+  // ... (showLogin, showCadastro, cardClassName) ...
   const showLogin = () => setIsLoginActive(true);
   const showCadastro = () => setIsLoginActive(false);
   const cardClassName = `card ${isLoginActive ? 'loginActive' : 'cadastroActive'}`;
 
-  // 5. Verificação de loading
   if (isLoading) {
     return <LoadingScreen />;
   }
 
-  // 6. Seu código original da página
   return (
     <section 
       className="containerPaiLogin"
@@ -41,11 +82,27 @@ function LoginPage() {
         <div className="esquerda">
           <div className="formLogin">
             <h2>Fazer Login</h2>
-            <form>
-              <input type="email" placeholder="E-mail" />
-              <input type="password" placeholder="Senha" />
+            {/* --- MODIFICAR O FORMULÁRIO DE LOGIN --- */}
+            <form onSubmit={handleLoginSubmit}>
+              <input 
+                type="email" 
+                placeholder="E-mail"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+              <input 
+                type="password" 
+                placeholder="Senha"
+                value={senha}
+                onChange={(e) => setSenha(e.target.value)}
+                required
+              />
+              {/* Exibe a mensagem de erro */}
+              {error && <p className="login-error">{error}</p>}
               <button type="submit">Entrar</button>
             </form>
+            {/* --- FIM DA MODIFICAÇÃO DO FORM --- */}
           </div>
           <div className="facaLogin">
             <h2>Já tem <br /> uma conta?</h2>
@@ -55,7 +112,8 @@ function LoginPage() {
             </button>
           </div>
         </div>
-        {/* LADO DIREITO */}
+        
+        {/* LADO DIREITO (Cadastro - não modificado) */}
         <div className="direita">
           <div className="formCadastro">
             <h2>Cadastro</h2>

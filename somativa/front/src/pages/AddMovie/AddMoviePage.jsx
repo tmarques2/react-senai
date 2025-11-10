@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './AddMoviePage.css';
 import LoadingScreen from '../../components/LoadingScreen/LoadingScreen.jsx'; 
+// 1. IMPORTAR O CONTEXTO DE AUTENTICAÇÃO
+import { useAuth } from '../../context/AuthContext';
 
-// Estado inicial do formulário
+// 2. CORRIGIR O ESTADO INICIAL (de 'nome' para 'titulo')
 const initialState = {
-  nome: '',
+  titulo: '', // Era 'nome'
   poster: '',
   atores: '',
   diretor: '',
@@ -25,7 +27,10 @@ function AddMoviePage() {
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
-  // Efeito para o loading cosmético
+  // 3. PEGAR DADOS DE AUTENTICAÇÃO
+  const { token, isAdmin } = useAuth();
+
+  // Efeito de loading (sem alteração)
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
@@ -42,32 +47,45 @@ function AddMoviePage() {
     }));
   };
 
+  // 4. ATUALIZAR O SUBMIT
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     setError(null);
     setSuccess(null);
 
+    // Se não estiver logado, não faz nada (embora a rota já proteja)
+    if (!token) {
+      setError('Você precisa estar logado para enviar um filme.');
+      setIsSubmitting(false);
+      return;
+    }
+
     try {
       const response = await fetch('http://localhost:8081/sendcadastro', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          // ADICIONAR O TOKEN DE AUTORIZAÇÃO
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(formData), 
       });
 
+      const data = await response.json(); // Pega a resposta do servidor
+
       if (!response.ok) {
-        const errData = await response.json();
-        throw new Error(errData.error || 'Falha ao cadastrar o filme.');
+        throw new Error(data.error || 'Falha ao cadastrar o filme.');
       }
 
-      setSuccess('Filme cadastrado com sucesso! Redirecionando...');
+      // USA A MENSAGEM VINDA DO SERVIDOR
+      // (ex: "Filme enviado para aprovação")
+      setSuccess(data.message + ' Redirecionando...');
       setFormData(initialState); 
       
       setTimeout(() => {
         navigate('/catalogo');
-      }, 2000);
+      }, 2500); // Aumentei o tempo para dar para ler a msg
 
     } catch (e) {
       setError(e.message);
@@ -80,6 +98,11 @@ function AddMoviePage() {
   if (isLoading) {
     return <LoadingScreen />;
   }
+  
+  // 5. DETERMINAR O TEXTO DO BOTÃO
+  const buttonText = isAdmin() 
+    ? 'Cadastrar Filme' 
+    : 'Enviar Pedido de Cadastro';
 
   return (
     <div className="addMoviePage">
@@ -90,12 +113,13 @@ function AddMoviePage() {
           
           {/* --- Coluna 1 --- */}
           <div className="form-group">
-            <label htmlFor="nome">Título do Filme</label>
+            <label htmlFor="titulo">Título do Filme</label>
             <input
               type="text"
-              id="nome"
-              name="nome"
-              value={formData.nome}
+              // 6. CORRIGIR ID E NOME
+              id="titulo"
+              name="titulo"
+              value={formData.titulo}
               onChange={handleChange}
               placeholder="Ex: Um Sonho de Liberdade"
               required
@@ -151,7 +175,6 @@ function AddMoviePage() {
             />
           </div>
           
-          {/* Produtora agora está na Coluna 2 */}
           <div className="form-group">
             <label htmlFor="produtora">Produtora</label>
             <input
@@ -166,7 +189,6 @@ function AddMoviePage() {
 
           {/* --- Campos de Largura Total --- */}
           
-          {/* URL do Pôster agora está em Largura Total */}
           <div className="form-group form-group-full">
             <label htmlFor="poster">URL do Pôster (Vertical)</label>
             <input
@@ -229,7 +251,8 @@ function AddMoviePage() {
               className="submitMovieButton"
               disabled={isSubmitting}
             >
-              {isSubmitting ? 'Cadastrando...' : 'Cadastrar Filme'}
+              {/* 7. MUDAR O TEXTO DO BOTÃO DINAMICAMENTE */}
+              {isSubmitting ? 'Enviando...' : buttonText}
             </button>
           </div>
         </form>
