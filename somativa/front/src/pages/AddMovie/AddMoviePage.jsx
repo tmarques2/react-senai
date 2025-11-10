@@ -49,7 +49,7 @@ function AddMoviePage() {
     setSuccess(null);
 
     try {
-      const response = await fetch('http://localhost:8000/sendcadastro', {
+      const response = await fetch('http://localhost:8081/sendcadastro', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -28,7 +28,7 @@ function CatalogPage() {
       setError(null);
       
       // Constrói a URL base
-      let url = 'http://localhost:8000/listarfilmes';
+      let url = 'http://localhost:8081/listarfilmes';
 
       // 👇 4. Se houver um termo de busca, adiciona à URL
       if (searchTerm) {

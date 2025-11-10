@@ -69,7 +69,7 @@ function EditMoviePage() {
       try {
         setLoading(true);
         setFetchError(null);
-        const response = await fetch(`http://localhost:8000/getfilme?id=${id}`);
+        const response = await fetch(`http://localhost:8081/getfilme?id=${id}`);
         
         if (!response.ok) {
           throw new Error('Filme não encontrado ou falha ao buscar.');
@@ -123,7 +123,7 @@ function EditMoviePage() {
     };
 
     try {
-      const response = await fetch('http://localhost:8000/editarfilme', {
+      const response = await fetch('http://localhost:8081/editarfilme', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

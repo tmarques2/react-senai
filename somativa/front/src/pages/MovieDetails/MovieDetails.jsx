@@ -26,7 +26,7 @@ function MovieDetailsPage() {
       try {
         setLoading(true);
         setError(null);
-        const response = await fetch(`http://localhost:8000/getfilme?id=${id}`);
+        const response = await fetch(`http://localhost:8081/getfilme?id=${id}`);
         
         if (!response.ok) {
           throw new Error(`Filme não encontrado (Status: ${response.status})`);
@@ -71,7 +71,7 @@ function MovieDetailsPage() {
     setDeleteError(null);
 
     try {
-      const response = await fetch('http://localhost:8000/deletarfilme', {
+      const response = await fetch('http://localhost:8081/deletarfilme', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

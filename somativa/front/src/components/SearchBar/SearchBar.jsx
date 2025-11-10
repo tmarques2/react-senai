@@ -32,7 +32,7 @@ function SearchBar() {
     const timer = setTimeout(() => {
       const fetchSuggestions = async () => {
         try {
-          const response = await fetch(`http://localhost:8000/listarfilmes?search=${encodeURIComponent(searchTerm)}`);
+          const response = await fetch(`http://localhost:8081/listarfilmes?search=${encodeURIComponent(searchTerm)}`);
           if (!response.ok) throw new Error('Falha ao buscar sugestões');
           const data = await response.json();
           setSuggestions(data.slice(0, 5));

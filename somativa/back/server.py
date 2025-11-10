@@ -402,9 +402,9 @@ class MyHandle(SimpleHTTPRequestHandler):
 # --- FIM DO HANDLER ---
 
 def main():
-    server_address = ('', 8000)
+    server_address = ('', 8081)
     httpd = HTTPServer(server_address, MyHandle)
-    print("Servidor rodando em http://localhost:8000")
+    print("Servidor rodando em http://localhost:8081")
     httpd.serve_forever()
 
 if __name__ == '__main__':

@@ -1,27 +1,29 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import Slider from 'react-slick';
+// Importação do CSS
 import './BannerCarousel.css';
 
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-
-// banners
+// Dados dos banners
+// Em uma aplicação real, isso viria de uma API
 const bannerImages = [
   {
     id: 1,
-    imageUrl: "https://i.pinimg.com/1200x/51/a7/1c/51a71c289b66efbd4bbd4abc96bd23f2.jpg"
+    imageUrl: "https://i.pinimg.com/1200x/51/a7/1c/51a71c289b66efbd4bbd4abc96bd23f2.jpg",
+    title: "Banner 1"
   },
   {
     id: 2,
-    imageUrl: "https://i.pinimg.com/736x/71/e3/d8/71e3d8e53ea730c06b9424341f362bfd.jpg"
+    imageUrl: "https://i.pinimg.com/736x/71/e3/d8/71e3d8e53ea730c06b9424341f362bfd.jpg",
+    title: "Banner 2"
   },
   {
     id: 3,
-    imageUrl: "https://i.pinimg.com/736x/9b/c3/d1/9bc3d1c1cd018be19f265d1bc9ef28e9.jpg"
+    imageUrl: "https://i.pinimg.com/736x/9b/c3/d1/9bc3d1c1cd018be19f265d1bc9ef28e9.jpg",
+    title: "Banner 3"
   },
   {
     id: 4,
-    imageUrl: "https://i.pinimg.com/736x/3d/c3/d2/3dc3d26d02d666ab5b664c8d039f4b2f.jpg"
+    imageUrl: "https://i.pinimg.com/736x/3d/c3/d2/3dc3d26d02d666ab5b664c8d039f4b2f.jpg",
+    title: "Banner 4"
   }
 ];
 
@@ -35,15 +37,15 @@ const BannerCarousel = () => {
     );
   }, []);
 
-  const goToPrev = () => {
+  const goToPrev = useCallback(() => {
     setCurrentIndex((prevIndex) =>
       prevIndex === 0 ? bannerImages.length - 1 : prevIndex - 1
     );
-  };
+  }, []);
 
-  const goToSlide = (index) => {
+  const goToSlide = useCallback((index) => {
     setCurrentIndex(index);
-  };
+  }, []);
 
   // Efeito para o autoplay
   useEffect(() => {
@@ -55,47 +57,63 @@ const BannerCarousel = () => {
     return () => clearInterval(timer);
   }, [goToNext, autoplaySpeed]);
 
-  // O componente <CarouselStyles /> foi removido daqui
   return (
-    <div className="banner-carousel-container">
+    // Container principal usando a classe do CSS
+    <section 
+      className="bannerCarouselContainer"
+      role="region"
+      aria-label="Carrossel de Banners"
+    >
       {/* Slider */}
       <div
-        className="carousel-slider"
+        className="carouselSlider"
         style={{ transform: `translateX(-${currentIndex * 100}%)` }}
       >
         {bannerImages.map((banner) => (
-          <div key={banner.id} className="carousel-slide-item">
+          <div key={banner.id} className="carouselSlideItem">
             <img
               src={banner.imageUrl}
               alt={banner.title || `Banner ${banner.id}`}
-              className="carousel-slide-image"
+              className="carouselSlideImage"
+              // Adiciona fallback de imagem
+              onError={(e) => { e.target.onerror = null; e.target.src="https://placehold.co/1200x450/1a1a1a/f0f0f0?text=Imagem+Indisponivel"; }}
             />
-            <div className="carousel-slide-caption">
-              <h3>{banner.title}</h3>
-            </div>
           </div>
         ))}
       </div>
 
-      {/* Setas */}
-      <button className="carousel-arrow prev" onClick={goToPrev}>
+      {/* Setas de Navegação */}
+      <button 
+        className="carouselArrow prev" 
+        onClick={goToPrev}
+        aria-label="Slide anterior"
+      >
         &#10094;
       </button>
-      <button className="carousel-arrow next" onClick={goToNext}>
+      <button 
+        className="carouselArrow next" 
+        onClick={goToNext}
+        aria-label="Próximo slide"
+      >
         &#10095;
       </button>
 
-      {/* Pontos */}
-      <div className="carousel-dots">
+      {/* Pontos de Navegação */}
+      <div className="carouselDots">
         {bannerImages.map((_, index) => (
           <div
             key={index}
-            className={`carousel-dot ${currentIndex === index ? 'active' : ''}`}
+            // Classe dinâmica para o dot ativo
+            className={`carouselDot ${currentIndex === index ? 'active' : ''}`}
             onClick={() => goToSlide(index)}
+            role="button"
+            aria-label={`Ir para o slide ${index + 1}`}
+            tabIndex={0} // Permite focar com o teclado
+            onKeyDown={(e) => e.key === 'Enter' && goToSlide(index)}
           />
         ))}
       </div>
-    </div>
+    </section>
   );
 };
 
