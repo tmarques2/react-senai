@@ -24,7 +24,7 @@ function Footer() {
         {/* Links de Navegação do Footer */}
         <div className="footer-links">
           <div className="footer-column">
-            <Link to="/">Sobre Nós</Link>
+            <Link to="/sobre-nos">Sobre Nós</Link>
             <Link to="/">Carreiras</Link>
           </div>
           <div className="footer-column">

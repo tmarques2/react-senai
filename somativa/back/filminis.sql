@@ -42,6 +42,8 @@ CREATE TABLE Pais (
     pais VARCHAR(100) NOT NULL UNIQUE
 );
 
+-- --- MODIFICAÇÃO AQUI ---
+-- A tabela Filme agora tem a coluna 'status'
 CREATE TABLE Filme (
     id_filme INT PRIMARY KEY AUTO_INCREMENT,
     titulo VARCHAR(255) NOT NULL,
@@ -49,8 +51,25 @@ CREATE TABLE Filme (
     tempo_de_duracao TIME,
     ano INT,
     poster VARCHAR(255),
-    sinopse TEXT -- A COLUNA SINOPSE FOI MOVIDA PARA AQUI
+    sinopse TEXT,
+    
+    -- Adiciona o status.
+    -- 'aprovado' como padrão para que seus filmes já inseridos apareçam.
+    status ENUM('pendente', 'aprovado') NOT NULL DEFAULT 'aprovado'
 );
+-- --- FIM DA MODIFICAÇÃO ---
+
+
+-- --- NOVA TABELA ---
+-- Tabela para guardar os usuários admin e comum
+CREATE TABLE Usuario (
+    id_usuario INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    senha_hash VARCHAR(255) NOT NULL,
+    tipo_usuario ENUM('comum', 'admin') NOT NULL DEFAULT 'comum'
+);
+-- --- FIM DA NOVA TABELA ---
+
 
 CREATE TABLE Filme_Genero (
 	id_filme_genero INT PRIMARY KEY AUTO_INCREMENT,
@@ -172,7 +191,8 @@ INSERT INTO Linguagem (idioma) VALUES
 INSERT INTO Pais (pais) VALUES
 ('EUA'), ('Reino Unido'), ('Nova Zelândia'), ('Coreia do Sul'), ('Japão');
 
--- 5. INSERE OS FILMES (AGORA COM A COLUNA 'sinopse')
+-- 5. INSERE OS FILMES
+-- (Não precisa mudar nada aqui, o 'status' DEFAULT 'aprovado' será aplicado)
 INSERT INTO Filme (titulo, orcamento, tempo_de_duracao, ano, poster, sinopse) VALUES
 ('Um Sonho de Liberdade', 25000000.00, '02:22:00', 1994, 'https://br.web.img3.acsta.net/c_310_420/medias/nmedia/18/90/16/48/20083748.jpg', 'Andy Dufresne é condenado a duas prisões perpétuas consecutivas pelas mortes de sua esposa e do amante dela. Porém, só Andy sabe que ele não cometeu os crimes. Na prisão, ele, um ex-banqueiro, faz amizade com Ellis "Red" Redding, um prisioneiro que cumpre pena há 20 anos.'),
 ('O Poderoso Chefão', 6000000.00, '02:55:00', 1972, 'https://br.web.img3.acsta.net/medias/nmedia/18/90/93/20/20120876.jpg', 'O patriarca de uma organização criminosa transfere o controle de seu império clandestino para seu filho relutante.'),
@@ -246,27 +266,17 @@ INSERT INTO Filme_pais (id_filme, id_pais) VALUES
 (10, 1), (11, 1), (11, 2), (12, 4), (13, 1), (14, 5), (15, 1), (16, 1), (17, 1), (18, 2), (18, 1), 
 (19, 1), (20, 1), (21, 1), (22, 1), (23, 1), (24, 1), (25, 1), (26, 1), (27, 1);
 
--- 7. VERIFICAÇÃO FINAL
-select * from filme;
-
-USE Filminis;
-
--- 1. ADICIONA ATORES, DIRETORES E PRODUTORAS (se ainda não existirem)
--- (O AUTO_INCREMENT vai cuidar dos IDs)
+-- 7. ADICIONA MALÉVOLA (ID 28)
 INSERT IGNORE INTO Ator (nome, sobrenome) VALUES 
 ('Angelina', 'Jolie'), 
 ('Elle', 'Fanning'), 
 ('Sharlto', 'Copley');
-
 INSERT IGNORE INTO Diretor (nome, sobrenome) VALUES 
 ('Robert', 'Stromberg');
-
 INSERT IGNORE INTO Produtora (produtora) VALUES 
 ('Walt Disney Pictures'), 
 ('Roth Films');
 
--- 2. INSERE O FILME "MALÉVOLA"
--- (Ele vai pegar o próximo ID disponível, provavelmente 28)
 INSERT INTO Filme (titulo, orcamento, tempo_de_duracao, ano, poster, sinopse) VALUES 
 (
     'Malévola', 
@@ -276,57 +286,38 @@ INSERT INTO Filme (titulo, orcamento, tempo_de_duracao, ano, poster, sinopse) VA
     'https://i.pinimg.com/736x/fd/27/9b/fd279b728870e6195cb904d42bcf0be2.jpg', 
     'Uma fada vingativa é levada a amaldiçoar uma princesa recém-nascida, apenas para descobrir que a criança pode ser a única pessoa que pode restaurar a paz em sua terra conturbada.'
 );
-
--- 3. CRIA AS LIGAÇÕES (GÊNEROS, ATORES, DIRETORES, ETC.)
--- ATENÇÃO: Este script assume que o ID de Malévola será 28.
--- Se for diferente, ajuste o "28" abaixo.
-
--- Liga Gêneros: Fantasia (6), Aventura (2), Drama (4)
+-- (O ID será 28)
 INSERT INTO Filme_Genero (id_filme, id_genero) VALUES 
 (28, 6), 
 (28, 2), 
 (28, 4);
-
--- Liga Atores: Angelina Jolie, Elle Fanning, Sharlto Copley
 INSERT INTO Filme_ator (id_filme, id_ator) VALUES 
 (28, (SELECT id_ator FROM Ator WHERE nome = 'Angelina' AND sobrenome = 'Jolie')),
 (28, (SELECT id_ator FROM Ator WHERE nome = 'Elle' AND sobrenome = 'Fanning')),
 (28, (SELECT id_ator FROM Ator WHERE nome = 'Sharlto' AND sobrenome = 'Copley'));
-
--- Liga Diretor: Robert Stromberg
 INSERT INTO Filme_diretor (id_filme, id_diretor) VALUES 
 (28, (SELECT id_diretor FROM Diretor WHERE nome = 'Robert' AND sobrenome = 'Stromberg'));
-
--- Liga Produtoras: Walt Disney Pictures, Roth Films
 INSERT INTO Filme_produtora (id_filme, id_produtora) VALUES 
 (28, (SELECT id_produtora FROM Produtora WHERE produtora = 'Walt Disney Pictures')),
 (28, (SELECT id_produtora FROM Produtora WHERE produtora = 'Roth Films'));
-
--- Liga Linguagem e País
-INSERT INTO Filme_linguagem (id_filme, id_linguagem) VALUES (28, 1); -- Inglês
-INSERT INTO Filme_pais (id_filme, id_pais) VALUES (28, 1); -- EUA
+INSERT INTO Filme_linguagem (id_filme, id_linguagem) VALUES (28, 1);
+INSERT INTO Filme_pais (id_filme, id_pais) VALUES (28, 1);
 
 
-
-USE Filminis;
-
--- Adiciona os novos atores, diretores, produtoras (IGNORAR se já existirem)
+-- 8. ADICIONA CORINGA, DUNA, VINGADORES (IDs 29, 30, 31)
 INSERT IGNORE INTO Ator (nome, sobrenome) VALUES 
 ('Joaquin', 'Phoenix'), ('Robert', 'De Niro'),
 ('Timothée', 'Chalamet'), ('Rebecca', 'Ferguson'),
 ('Robert', 'Downey Jr.'), ('Chris', 'Evans'), ('Mark', 'Ruffalo');
-
 INSERT IGNORE INTO Diretor (nome, sobrenome) VALUES 
 ('Todd', 'Phillips'),
 ('Denis', 'Villeneuve'),
 ('Anthony', 'Russo'), ('Joe', 'Russo');
-
 INSERT IGNORE INTO Produtora (produtora) VALUES 
 ('DC Films'), ('Bron Studios'),
 ('Legendary Entertainment'),
 ('Marvel Studios');
 
--- Insere os 3 filmes novos (IDs 29, 30, 31)
 INSERT INTO Filme (titulo, orcamento, tempo_de_duracao, ano, poster, sinopse) VALUES 
 (
     'Coringa', 
@@ -353,32 +344,44 @@ INSERT INTO Filme (titulo, orcamento, tempo_de_duracao, ano, poster, sinopse) VA
     'Após os eventos devastadores de "Guerra Infinita", os Vingadores restantes se reúnem para uma última tentativa de reverter as ações de Thanos e restaurar o equilíbrio do universo.'
 );
 
--- Liga os gêneros dos novos filmes
--- Coringa (ID 29): Drama (4), Crime (5), Suspense (7)
+-- Ligações Coringa (29)
 INSERT INTO Filme_Genero (id_filme, id_genero) VALUES (29, 4), (29, 5), (29, 7);
--- Duna (ID 30): Ficção Científica (3), Aventura (2), Drama (4)
-INSERT INTO Filme_Genero (id_filme, id_genero) VALUES (30, 3), (30, 2), (30, 4);
--- Vingadores (ID 31): Ação (1), Aventura (2), Ficção Científica (3)
-INSERT INTO Filme_Genero (id_filme, id_genero) VALUES (31, 1), (31, 2), (31, 3);
-
--- Liga Atores, Diretores, Produtoras, etc. (Opcional, mas recomendado)
--- Coringa (29)
 INSERT INTO Filme_ator (id_filme, id_ator) VALUES (29, (SELECT id_ator FROM Ator WHERE nome = 'Joaquin' AND sobrenome = 'Phoenix'));
 INSERT INTO Filme_diretor (id_filme, id_diretor) VALUES (29, (SELECT id_diretor FROM Diretor WHERE nome = 'Todd' AND sobrenome = 'Phillips'));
 INSERT INTO Filme_produtora (id_filme, id_produtora) VALUES (29, (SELECT id_produtora FROM Produtora WHERE produtora = 'DC Films'));
 INSERT INTO Filme_linguagem (id_filme, id_linguagem) VALUES (29, 1);
 INSERT INTO Filme_pais (id_filme, id_pais) VALUES (29, 1);
 
--- Duna (30)
+-- Ligações Duna (30)
+INSERT INTO Filme_Genero (id_filme, id_genero) VALUES (30, 3), (30, 2), (30, 4);
 INSERT INTO Filme_ator (id_filme, id_ator) VALUES (30, (SELECT id_ator FROM Ator WHERE nome = 'Timothée' AND sobrenome = 'Chalamet'));
 INSERT INTO Filme_diretor (id_filme, id_diretor) VALUES (30, (SELECT id_diretor FROM Diretor WHERE nome = 'Denis' AND sobrenome = 'Villeneuve'));
 INSERT INTO Filme_produtora (id_filme, id_produtora) VALUES (30, (SELECT id_produtora FROM Produtora WHERE produtora = 'Legendary Entertainment'));
 INSERT INTO Filme_linguagem (id_filme, id_linguagem) VALUES (30, 1);
 INSERT INTO Filme_pais (id_filme, id_pais) VALUES (30, 1);
 
--- Vingadores (31)
+-- Ligações Vingadores (31)
+INSERT INTO Filme_Genero (id_filme, id_genero) VALUES (31, 1), (31, 2), (31, 3);
 INSERT INTO Filme_ator (id_filme, id_ator) VALUES (31, (SELECT id_ator FROM Ator WHERE nome = 'Robert' AND sobrenome = 'Downey Jr.'));
 INSERT INTO Filme_diretor (id_filme, id_diretor) VALUES (31, (SELECT id_diretor FROM Diretor WHERE nome = 'Anthony' AND sobrenome = 'Russo'));
 INSERT INTO Filme_produtora (id_filme, id_produtora) VALUES (31, (SELECT id_produtora FROM Produtora WHERE produtora = 'Marvel Studios'));
 INSERT INTO Filme_linguagem (id_filme, id_linguagem) VALUES (31, 1);
 INSERT INTO Filme_pais (id_filme, id_pais) VALUES (31, 1);
+
+
+-- --- INSERE OS NOVOS USUÁRIOS DE TESTE ---
+-- Senha para ambos é: senha123
+-- O hash SHA-256 de "senha123" é:
+-- 'a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3'
+
+INSERT INTO Usuario (email, senha_hash, tipo_usuario) 
+VALUES ('admin@filminis.com', '55a5e9e78207b4df8699d60886fa070079463547b095d1a05bc719bb4e6cd251', 'admin');
+
+INSERT INTO Usuario (email, senha_hash, tipo_usuario) 
+VALUES ('user@filminis.com', '55a5e9e78207b4df8699d60886fa070079463547b095d1a05bc719bb4e6cd251', 'comum');
+-- --- FIM DOS INSERTS DE USUÁRIO ---
+
+
+-- 9. VERIFICAÇÃO FINAL
+select * from filme;
+select * from usuario;

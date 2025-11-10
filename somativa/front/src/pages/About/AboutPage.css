@@ -1,0 +1,117 @@
+/* src/pages/About/AboutPage.css */
+
+.about-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 2rem;
+  color: #fff;
+}
+
+/* Título principal (igual ao Admin Dashboard) */
+.about-container h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid #E50914; /* Acento vermelho */
+  padding-bottom: 0.5rem;
+  color: #fff;
+}
+
+/* Cada secção (O Projeto, Tecnologias, etc.) */
+.about-section {
+  margin-bottom: 3rem;
+}
+
+.about-section h3 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #E50914; /* Título da secção em vermelho */
+  margin-bottom: 1rem;
+}
+
+.about-section p {
+  color: #ccc;
+  font-size: 1.1rem;
+  line-height: 1.7;
+  margin-bottom: 1rem;
+}
+
+.about-section p strong {
+  color: #fff;
+  font-weight: 600;
+}
+
+/* Lista de funcionalidades */
+.about-section ul {
+  color: #ccc;
+  font-size: 1.1rem;
+  line-height: 1.7;
+  list-style-position: outside;
+  padding-left: 20px;
+}
+
+.about-section ul ul {
+  margin-top: 0.5rem;
+}
+
+.about-section li {
+  margin-bottom: 0.5rem;
+}
+
+/* Grelha de Tecnologias */
+.tech-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.tech-item {
+  background-color: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.5rem;
+}
+
+.tech-item svg {
+  font-size: 3.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.tech-item strong {
+  font-size: 1.2rem;
+  color: #fff;
+}
+
+.tech-item span {
+  font-size: 0.9rem;
+  color: #aaa;
+  line-height: 1.4;
+}
+
+/* Botões de Contato (GitHub/LinkedIn) */
+.contact-links {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.contact-links a {
+  display: inline-block;
+  background-color: #E50914;
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: opacity 0.3s ease;
+}
+
+.contact-links a:hover {
+  opacity: 0.8;
+}

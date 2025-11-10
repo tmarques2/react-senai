@@ -1,43 +1,40 @@
-// src/pages/MovieDetails/MovieDetails.jsx
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import LoadingScreen from '../../components/LoadingScreen/LoadingScreen.jsx';
 import './MovieDetails.css';
-
-// --- 1. IMPORTE O useAuth ---
 import { useAuth } from '../../context/AuthContext.jsx';
+
+// 1. IMPORTAR O NOVO MODAL
+import Modal from '../../components/Modal/Modal.jsx';
 
 function MovieDetailsPage() {
   const [movie, setMovie] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   
-  const [showModal, setShowModal] = useState(false);
+  // 2. MUDAR O NOME DO ESTADO para ser mais claro
+  const [isModalOpen, setIsModalOpen] = useState(false); // Era 'showModal'
+  
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState(null);
   
   const { id } = useParams(); 
   const navigate = useNavigate(); 
-
-  // --- 2. PEGUE AS INFORMAÇÕES DE AUTH ---
   const { isAdmin, token } = useAuth();
   
-  // Efeito para buscar os dados do filme (sem alteração)
+  // ... (useEffect de fetchMovie não muda) ...
   useEffect(() => {
-    // ... (seu código de fetchMovie continua igual) ...
     const fetchMovie = async () => {
        try {
          setLoading(true);
          setError(null);
          const response = await fetch(`http://localhost:8081/getfilme?id=${id}`);
-         
          if (!response.ok) {
            throw new Error(`Filme não encontrado (Status: ${response.status})`);
          }
-         
          const data = await response.json();
-
-         if (data) {
+         // ... (formatação de dados)
+         if (data) {
            data.diretores = data.diretores || 'Não informado';
            data.atores = data.atores || 'Não informado';
            data.generos = data.generos || 'Não informado';
@@ -46,26 +43,28 @@ function MovieDetailsPage() {
            data.orcamento = data.orcamento ? parseFloat(data.orcamento).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : 'Não informado';
            data.tempo_de_duracao = data.tempo_de_duracao || 'Não informado';
          }
-         
          setMovie(data);
        } catch (e) {
          setError(e.message);
-         console.error("Erro ao buscar detalhes do filme:", e);
        } finally {
          setLoading(false);
        }
      };
-
      fetchMovie();
   }, [id]);
 
-  // ... (handleDeleteClick) ...
+  // 3. Atualizar funções para usar o novo estado
   const handleDeleteClick = () => {
-     setShowModal(true); 
-     setDeleteError(null);
-   };
-
-  // --- 3. MODIFIQUE a função de deletar ---
+    setIsModalOpen(true); 
+    setDeleteError(null); 
+  };
+  
+  const handleCancelDelete = () => {
+    if (!isDeleting) {
+      setIsModalOpen(false);
+    }
+  };
+  
   const handleConfirmDelete = async () => {
     setIsDeleting(true);
     setDeleteError(null);
@@ -75,161 +74,91 @@ function MovieDetailsPage() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          // ADICIONE O TOKEN DE AUTORIZAÇÃO
-          'Authorization': `Bearer ${token}` 
+          'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ id: id }),
+        body: JSON.stringify({ id: id }), 
       });
 
       if (!response.ok) {
         const errData = await response.json();
         throw new Error(errData.error || 'Falha ao deletar o filme.');
       }
-
-      setShowModal(false);
+      
+      setIsModalOpen(false);
       navigate('/catalogo'); 
 
     } catch (e) {
+      // 4. Mostrar erro *dentro* do modal
       setDeleteError(e.message);
     } finally {
       setIsDeleting(false);
     }
   };
-
-  // ... (handleCancelDelete, handleEditClick) ...
-   const handleCancelDelete = () => {
-     if (!isDeleting) {
-       setShowModal(false);
-     }
-   };
-   const handleEditClick = () => {
-     navigate(`/editar/${id}`);
-   };
+  
+  const handleEditClick = () => {
+    navigate(`/editar/${id}`);
+  };
 
   // ... (Renderização de loading, error, !movie) ...
-  if (loading) {
-     return <LoadingScreen />;
-   }
-
-   if (error) {
-     return (
-       <div className="movie-details-container" style={{ justifyContent: 'center', textAlign: 'center' }}>
-         <h2>Erro ao carregar filme:</h2>
-         <p style={{ color: '#ff0000' }}>{error}</p>
-         <Link to="/catalogo" className="back-link">Voltar ao Catálogo</Link>
-       </div>
-     );
-   }
-
-   if (!movie) {
-     return (
-       <div className="movie-details-container" style={{ justifyContent: 'center', textAlign: 'center' }}>
-         <h2>Filme não encontrado.</h2>
-         <Link to="/catalogo" className="back-link">Voltar ao Catálogo</Link>
-       </div>
-     );
-   }
+  if (loading) return <LoadingScreen />;
+  if (error) return ( <div>...Erro...</div> );
+  if (!movie) return ( <div>...Não encontrado...</div> );
 
   return (
     <>
       <div className="movie-details-container">
-        <div className="movie-content">
-          {/* Coluna do Poster */}
+        {/* ... (Todo o seu JSX da página de detalhes) ... */}
+        {/* ... (movie-content, movie-poster-wrapper, movie-info) ... */}
+        {/* ... (sinopse-block, action-buttons, etc) ... */}
+         <div className="movie-content">
           <div className="movie-poster-wrapper">
-             {/* ... (seu img tag) ... */}
-             <img 
-               src={movie.poster} 
-               alt={movie.titulo}
-               onError={(e) => { e.target.onerror = null; e.target.src="https://placehold.co/400x600/222/fff?text=Poster"; }}
-             />
+            <img 
+              src={movie.poster} 
+              alt={movie.titulo}
+              onError={(e) => { e.target.onerror = null; e.target.src="https://placehold.co/400x600/222/fff?text=Poster"; }}
+            />
           </div>
-          
-          {/* Coluna das Informações */}
           <div className="movie-info">
             <h1>{movie.titulo} ({movie.ano})</h1>
-            
-            {/* ... (todos os info-item) ... */}
-            <div className="info-item">
-               <strong>Gênero:</strong>
-               <span>{movie.generos}</span>
-             </div>
-             <div className="info-item">
-               <strong>Diretor:</strong>
-               <span>{movie.diretores}</span>
-             </div>
-             <div className="info-item">
-               <strong>Elenco:</strong>
-               <span>{movie.atores}</span>
-             </div>
-             <div className="info-item">
-               <strong>Produtora:</strong>
-               <span>{movie.produtoras}</span>
-             </div>
-             <div className="info-item">
-               <strong>Duração:</strong>
-               <span>{movie.tempo_de_duracao}</span>
-         _ </div>
-             <div className="info-item">
-               <strong>Orçamento:</strong>
-               <span>{movie.orcamento}</span>
-             </div>
-
+            <div className="info-item"><strong>Gênero:</strong><span>{movie.generos}</span></div>
+            <div className="info-item"><strong>Diretor:</strong><span>{movie.diretores}</span></div>
+            <div className="info-item"><strong>Elenco:</strong><span>{movie.atores}</span></div>
+            <div className="info-item"><strong>Produtora:</strong><span>{movie.produtoras}</span></div>
+            <div className="info-item"><strong>Duração:</strong><span>{movie.tempo_de_duracao}</span></div>
+            <div className="info-item"><strong>Orçamento:</strong><span>{movie.orcamento}</span></div>
             <div className="sinopse-block">
               <h3>Sinopse</h3>
               <p>{movie.sinopse}</p>
             </div>
-
-            {/* --- 4. PROTEJA OS BOTÕES DE AÇÃO --- */}
-            {/* Estes botões só aparecem se o usuário for admin */}
             {isAdmin() && (
               <div className="action-buttons">
-                <button onClick={handleEditClick} className="edit-button">
-                  Editar
-                </button>
-                <button onClick={handleDeleteClick} className="delete-button">
-                  Remover
-                </button>
+                <button onClick={handleEditClick} className="edit-button">Editar</button>
+                <button onClick={handleDeleteClick} className="delete-button">Remover</button>
               </div>
             )}
-            
-            <Link to="/catalogo" className="back-link">
-              Voltar ao Catálogo
-            </Link>
+            <Link to="/catalogo" className="back-link">Voltar ao Catálogo</Link>
           </div>
         </div>
       </div>
 
-      {/* --- O Modal não precisa de alteração --- */}
-      {showModal && (
-        <div className="modal-overlay">
-           {/* ... (seu código do modal) ... */}
-           <div className="modal-content">
-           <h2>Confirmar Exclusão</h2>
-           <p>Você tem certeza que deseja remover o filme "{movie.titulo}"? Esta ação não pode ser desfeita.</p>
-           
-           {deleteError && (
-             <p className="modal-error">{deleteError}</p>
-           )}
-
-           <div className="modal-buttons">
-             <button 
-               onClick={handleCancelDelete} 
-               disabled={isDeleting}
-               className="modal-button cancel"
-             >
-               Cancelar
-             </button>
-             <button 
-               onClick={handleConfirmDelete} 
-               disabled={isDeleting}
-               className="modal-button confirm"
-             >
-               {isDeleting ? 'Removendo...' : 'Remover'}
-             </button>
-           </div>
-         </div>
-        </div>
-      )}
+      {/* 5. SUBSTITUIR O CÓDIGO DO MODAL ANTIGO PELO NOVO COMPONENTE */}
+      <Modal
+        isOpen={isModalOpen}
+        onClose={handleCancelDelete}
+        onConfirm={handleConfirmDelete}
+        title="Confirmar Exclusão"
+        type="confirm"
+        confirmText={isDeleting ? 'Removendo...' : 'Remover'}
+        confirmClass="danger" 
+      >
+        <p>Você tem certeza que deseja remover o filme "{movie?.titulo}"? Esta ação não pode ser desfeita.</p>
+        {/* Mostra o erro de delete dentro do modal */}
+        {deleteError && (
+          <p style={{ color: '#E50914', marginTop: '1rem', fontWeight: 'bold' }}>
+            Erro: {deleteError}
+          </p>
+        )}
+      </Modal>
     </>
   );
 }

@@ -19,7 +19,7 @@ const EditMoviePage = React.lazy(() => import('./pages/EditMovie/EditMovie'));
 
 // --- IMPORTE A NOVA PÁGINA DE ADMIN ---
 const AdminDashboard = React.lazy(() => import('./pages/AdminDashboard/AdminDashboard'));
-// --- FIM DO IMPORT ---
+const AboutPage = React.lazy(() => import('./pages/About/AboutPage'));
 
 import './index.css'; 
 
@@ -34,6 +34,7 @@ function App() {
               <Route path="/" element={<HomePage />} />
               <Route path="/catalogo" element={<CatalogPage />} />
               <Route path="/filme/:id" element={<MovieDetailsPage />} />
+              <Route path="/sobre-nos" element={<AboutPage />} />
             </Route>
             
             {/* Rota de Login (Pública, sem Header) */}
