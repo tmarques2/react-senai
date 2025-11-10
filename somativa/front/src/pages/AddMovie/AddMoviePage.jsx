@@ -2,12 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './AddMoviePage.css';
 import LoadingScreen from '../../components/LoadingScreen/LoadingScreen.jsx'; 
-// 1. IMPORTAR O CONTEXTO DE AUTENTICAÇÃO
 import { useAuth } from '../../context/AuthContext';
 
-// 2. CORRIGIR O ESTADO INICIAL (de 'nome' para 'titulo')
 const initialState = {
-  titulo: '', // Era 'nome'
+  titulo: '', // Corrigido de 'nome' para 'titulo'
   poster: '',
   atores: '',
   diretor: '',
@@ -27,10 +25,8 @@ function AddMoviePage() {
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
-  // 3. PEGAR DADOS DE AUTENTICAÇÃO
-  const { token, isAdmin } = useAuth();
+  const { token, isAdmin } = useAuth(); // Pegar dados de auth
 
-  // Efeito de loading (sem alteração)
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
@@ -47,14 +43,12 @@ function AddMoviePage() {
     }));
   };
 
-  // 4. ATUALIZAR O SUBMIT
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     setError(null);
     setSuccess(null);
 
-    // Se não estiver logado, não faz nada (embora a rota já proteja)
     if (!token) {
       setError('Você precisa estar logado para enviar um filme.');
       setIsSubmitting(false);
@@ -66,26 +60,23 @@ function AddMoviePage() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          // ADICIONAR O TOKEN DE AUTORIZAÇÃO
-          'Authorization': `Bearer ${token}`
+          'Authorization': `Bearer ${token}` // Enviar token
         },
         body: JSON.stringify(formData), 
       });
 
-      const data = await response.json(); // Pega a resposta do servidor
+      const data = await response.json(); 
 
       if (!response.ok) {
         throw new Error(data.error || 'Falha ao cadastrar o filme.');
       }
 
-      // USA A MENSAGEM VINDA DO SERVIDOR
-      // (ex: "Filme enviado para aprovação")
       setSuccess(data.message + ' Redirecionando...');
       setFormData(initialState); 
       
       setTimeout(() => {
         navigate('/catalogo');
-      }, 2500); // Aumentei o tempo para dar para ler a msg
+      }, 2500);
 
     } catch (e) {
       setError(e.message);
@@ -99,7 +90,6 @@ function AddMoviePage() {
     return <LoadingScreen />;
   }
   
-  // 5. DETERMINAR O TEXTO DO BOTÃO
   const buttonText = isAdmin() 
     ? 'Cadastrar Filme' 
     : 'Enviar Pedido de Cadastro';
@@ -111,14 +101,12 @@ function AddMoviePage() {
         
         <form className="addMovieForm" onSubmit={handleSubmit}>
           
-          {/* --- Coluna 1 --- */}
           <div className="form-group">
             <label htmlFor="titulo">Título do Filme</label>
             <input
               type="text"
-              // 6. CORRIGIR ID E NOME
               id="titulo"
-              name="titulo"
+              name="titulo" // Corrigido
               value={formData.titulo}
               onChange={handleChange}
               placeholder="Ex: Um Sonho de Liberdade"
@@ -150,7 +138,6 @@ function AddMoviePage() {
             />
           </div>
           
-          {/* --- Coluna 2 --- */}
           <div className="form-group">
             <label htmlFor="ano">Ano de Lançamento</label>
             <input
@@ -187,8 +174,6 @@ function AddMoviePage() {
             />
           </div>
 
-          {/* --- Campos de Largura Total --- */}
-          
           <div className="form-group form-group-full">
             <label htmlFor="poster">URL do Pôster (Vertical)</label>
             <input
@@ -237,7 +222,6 @@ function AddMoviePage() {
             ></textarea>
           </div>
 
-          {/* --- Ações do Formulário --- */}
           <div className="form-group-full">
             {error && (
               <div className="form-message error-message">{error}</div>
@@ -251,7 +235,6 @@ function AddMoviePage() {
               className="submitMovieButton"
               disabled={isSubmitting}
             >
-              {/* 7. MUDAR O TEXTO DO BOTÃO DINAMICAMENTE */}
               {isSubmitting ? 'Enviando...' : buttonText}
             </button>
           </div>

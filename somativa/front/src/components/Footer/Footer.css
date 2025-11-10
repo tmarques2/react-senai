@@ -23,19 +23,24 @@
 } 
 */
 
-/* --- NOVO ESTILO ADICIONADO --- */
+/* --- MUDANÇA AQUI --- */
 .footer-logo-img {
-  /* Altura igual à do Header para consistência */
+  /* 1. Faz a imagem se comportar como um bloco */
+  display: block;
+  /* 2. Adiciona margens automáticas nos lados, forçando a centralização */
+  margin-left: auto;
+  margin-right: auto;
+
   height: 40px; 
-  object-fit: contain; /* Garante que a logo não distorça */
+  object-fit: contain; 
   transition: opacity 0.3s ease;
 }
+/* --- FIM DA MUDANÇA --- */
+
 
 .footer-logo-img:hover {
   opacity: 0.8;
 }
-/* --- FIM DA MUDANÇA --- */
-
 
 /* Links de Mídia Social */
 .footer-socials {

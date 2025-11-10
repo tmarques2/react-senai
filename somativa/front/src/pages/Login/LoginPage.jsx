@@ -1,26 +1,21 @@
-// src/pages/Login/LoginPage.jsx
 import React, { useState, useEffect } from 'react';
 import './LoginPage.css';
 import fundoLogin from '../../assets/images/fundo_login.svg?url';
 import LoadingScreen from '../../components/LoadingScreen/LoadingScreen.jsx';
 
-// --- NOVOS IMPORTS ---
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext.jsx';
-// --- FIM DOS NOVOS IMPORTS ---
 
 function LoginPage() {
   const [isLoginActive, setIsLoginActive] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   
-  // --- ADICIONAR ESTES STATES ---
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [error, setError] = useState('');
   
   const { login } = useAuth();
   const navigate = useNavigate();
-  // --- FIM DOS NOVOS STATES ---
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -29,7 +24,6 @@ function LoginPage() {
     return () => clearTimeout(timer);
   }, []);
 
-  // --- NOVA FUNÇÃO DE LOGIN ---
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -47,23 +41,19 @@ function LoginPage() {
         throw new Error(data.error || 'Erro ao fazer login');
       }
 
-      // Login bem-sucedido!
       login(data.user, data.token);
       
-      // Se for admin, vai para o dashboard. Se não, vai para a home.
       if (data.user.tipo === 'admin') {
         navigate('/admin/dashboard');
       } else {
-        navigate('/'); // Redireciona para a Home
+        navigate('/');
       }
 
     } catch (err) {
       setError(err.message);
     }
   };
-  // --- FIM DA NOVA FUNÇÃO ---
 
-  // ... (showLogin, showCadastro, cardClassName) ...
   const showLogin = () => setIsLoginActive(true);
   const showCadastro = () => setIsLoginActive(false);
   const cardClassName = `card ${isLoginActive ? 'loginActive' : 'cadastroActive'}`;
@@ -78,11 +68,9 @@ function LoginPage() {
       style={{ '--fundo-login-url': `url(${fundoLogin})` }}
     >
       <div className={cardClassName}>
-        {/* LADO ESQUERDO */}
         <div className="esquerda">
           <div className="formLogin">
             <h2>Fazer Login</h2>
-            {/* --- MODIFICAR O FORMULÁRIO DE LOGIN --- */}
             <form onSubmit={handleLoginSubmit}>
               <input 
                 type="email" 
@@ -98,11 +86,9 @@ function LoginPage() {
                 onChange={(e) => setSenha(e.target.value)}
                 required
               />
-              {/* Exibe a mensagem de erro */}
-              {error && <p className="login-error">{error}</p>}
+              {error && <p className="login-error" style={{color: 'red', fontSize: '0.9rem'}}>{error}</p>}
               <button type="submit">Entrar</button>
             </form>
-            {/* --- FIM DA MODIFICAÇÃO DO FORM --- */}
           </div>
           <div className="facaLogin">
             <h2>Já tem <br /> uma conta?</h2>
@@ -113,7 +99,6 @@ function LoginPage() {
           </div>
         </div>
         
-        {/* LADO DIREITO (Cadastro - não modificado) */}
         <div className="direita">
           <div className="formCadastro">
             <h2>Cadastro</h2>

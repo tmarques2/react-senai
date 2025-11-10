@@ -1,16 +1,9 @@
 .main-layout-wrapper {
-  /* 1. Define o layout como uma coluna (Header em cima, Conteúdo no meio, Footer em baixo) */
   display: flex;
   flex-direction: column;
-  
-  /* 2. Garante que o layout tenha, NO MÍNIMO, a altura da janela do navegador */
   min-height: 100vh; 
 }
 
 .main-layout-content {
-  /* 3. Esta é a mágica:
-     Diz para a área de conteúdo "esticar" e ocupar todo o espaço
-     disponível, empurrando o Footer para o fundo.
-  */
   flex-grow: 1; 
 }

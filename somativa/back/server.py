@@ -13,7 +13,7 @@ import time      # Para o tempo de expiração do token
 # -------------------------
 
 # --- CONSTANTES ---
-# Mude isso em produção! Mantenha em segredo.
+# Mude isto em produção! Mantenha em segredo.
 JWT_SECRET = "MINHA_CHAVE_SECRETA_E_MUITO_FORTE_123456"
 
 # --- FUNÇÕES AUXILIARES ---
@@ -71,7 +71,6 @@ def get_or_create_id(cursor, table_name, column_name, value):
 
 # --- FUNÇÕES DE BANCO DE DADOS PRINCIPAIS ---
 
-# 👇 --- FUNÇÃO ATUALIZADA --- 👇
 # Agora só lista filmes APROVADOS
 def listar_filmes_banco(search_term=None):
     conexao = conectar_banco()
@@ -80,7 +79,6 @@ def listar_filmes_banco(search_term=None):
     
     params = []
     
-    # MODIFICADO: Adicionada cláusula "WHERE f.status = 'aprovado'"
     query = """
         SELECT 
             f.id_filme, f.titulo, f.ano, f.poster, f.sinopse, f.tempo_de_duracao, f.orcamento,
@@ -97,7 +95,7 @@ def listar_filmes_banco(search_term=None):
         LEFT JOIN Genero g ON fg.id_genero = g.id_genero
         LEFT JOIN Filme_produtora fp ON f.id_filme = fp.id_filme
         LEFT JOIN Produtora p ON fp.id_produtora = p.id_produtora
-        WHERE f.status = 'aprovado'  -- <<< MODIFICAÇÃO AQUI
+        WHERE f.status = 'aprovado'
         GROUP BY f.id_filme
     """
 
@@ -121,7 +119,6 @@ def listar_filmes_banco(search_term=None):
     conexao.close()
     return filmes
 
-# --- NOVA FUNÇÃO ---
 # Lista apenas filmes PENDENTES (para o admin)
 def listar_filmes_pendentes_banco():
     conexao = conectar_banco()
@@ -144,7 +141,7 @@ def listar_filmes_pendentes_banco():
         LEFT JOIN Genero g ON fg.id_genero = g.id_genero
         LEFT JOIN Filme_produtora fp ON f.id_filme = fp.id_filme
         LEFT JOIN Produtora p ON fp.id_produtora = p.id_produtora
-        WHERE f.status = 'pendente'  -- <<< FILTRA POR PENDENTE
+        WHERE f.status = 'pendente'
         GROUP BY f.id_filme;
     """
     
@@ -158,9 +155,7 @@ def buscar_filme_por_id(filme_id):
     conexao = conectar_banco()
     if not conexao: return None
     cursor = conexao.cursor(dictionary=True)
-
-    # Esta query não precisa de filtro de status, pois um admin
-    # pode querer buscar um filme pendente para editá-lo.
+    
     query = """
         SELECT 
             f.id_filme, f.titulo, f.ano, f.poster, f.sinopse, f.tempo_de_duracao, f.orcamento,
@@ -186,25 +181,36 @@ def buscar_filme_por_id(filme_id):
     conexao.close()
     return filme
 
-# --- HANDLER HTTP (COM CORREÇÃO DE CORS) ---
+# --- HANDLER HTTP ---
 
 class MyHandle(SimpleHTTPRequestHandler):
 
     def _send_cors_headers(self):
         self.send_header('Access-Control-Allow-Origin', 'http://localhost:5173')
         self.send_header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
-        # MODIFICADO: Permitir o header 'Authorization'
         self.send_header('Access-Control-Allow-Headers', 'Content-Type, Authorization')
 
-    # --- NOVAS FUNÇÕES DE AUTENTICAÇÃO ---
+    # --- NOVA FUNÇÃO DE CONTAGEM (dentro da classe) ---
+    def get_pending_count_banco(self):
+        """Busca apenas a contagem de filmes pendentes."""
+        conexao = conectar_banco()
+        if not conexao:
+            self._send_json_error(500, "Erro ao conectar ao banco.")
+            return None
+        
+        cursor = conexao.cursor()
+        try:
+            cursor.execute("SELECT COUNT(id_filme) FROM Filme WHERE status = 'pendente'")
+            count = cursor.fetchone()[0]
+            return count
+        except mysql.connector.Error as err:
+            self._send_json_error(500, f"Erro de banco de dados: {err}")
+            return None
+        finally:
+            self._close_db(cursor, conexao)
+            
+    # --- FUNÇÕES DE AUTENTICAÇÃO ---
     def validar_token(self, tipo_requerido=None):
-        """
-        Valida o token JWT do header 'Authorization'.
-        Retorna o payload (dados do usuário) se válido.
-        Retorna None se inválido ou ausente.
-        Se 'tipo_requerido' ('admin' ou 'comum') for fornecido,
-        também valida o tipo de usuário.
-        """
         try:
             auth_header = self.headers.get('Authorization')
             if not auth_header:
@@ -218,7 +224,6 @@ class MyHandle(SimpleHTTPRequestHandler):
 
             payload = jwt.decode(token, JWT_SECRET, algorithms=['HS256'])
             
-            # Verifica o tipo de usuário se requerido
             if tipo_requerido and payload.get('tipo') != tipo_requerido:
                 self._send_json_error(403, "Acesso negado. Permissão insuficiente.")
                 return None
@@ -236,7 +241,6 @@ class MyHandle(SimpleHTTPRequestHandler):
             return None
 
     def handle_login(self, data):
-        """Cuida da lógica de login."""
         email = data.get('email')
         senha = data.get('senha')
         
@@ -245,12 +249,12 @@ class MyHandle(SimpleHTTPRequestHandler):
             return
 
         senha_hasheada = hash_senha(senha)
-
+        
+        # --- DEBUG PRINT ---
         print("\n--- DEBUG LOGIN ---")
         print(f"EMAIL RECEBIDO: {email}")
         print(f"SENHA RECEBIDA: {senha}")
         print(f"HASH CALCULADO AGORA: {senha_hasheada}")
-        print("--- FIM DEBUG ---\n")
         
         conexao = conectar_banco()
         if not conexao:
@@ -258,18 +262,23 @@ class MyHandle(SimpleHTTPRequestHandler):
             return
             
         cursor = conexao.cursor(dictionary=True)
-        cursor.execute("SELECT id_usuario, email, tipo_usuario FROM Usuario WHERE email = %s AND senha_hash = %s", (email, senha_hasheada))
+        cursor.execute("SELECT id_usuario, email, tipo_usuario, senha_hash FROM Usuario WHERE email = %s", (email,))
         usuario = cursor.fetchone()
-        cursor.close()
-        conexao.close()
         
         if usuario:
+            print(f"HASH DO BANCO: {usuario['senha_hash']}")
+        else:
+            print("USUÁRIO NÃO ENCONTRADO")
+        print("--- FIM DEBUG ---\n")
+        
+        # Compara o hash calculado com o hash do banco
+        if usuario and usuario['senha_hash'] == senha_hasheada:
             # Usuário autenticado! Gerar token.
             payload = {
                 'id_usuario': usuario['id_usuario'],
                 'email': usuario['email'],
                 'tipo': usuario['tipo_usuario'],
-                'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=8) # Token expira em 8 horas
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=8)
             }
             token = jwt.encode(payload, JWT_SECRET, algorithm='HS256')
             
@@ -290,8 +299,11 @@ class MyHandle(SimpleHTTPRequestHandler):
         else:
             # Credenciais inválidas
             self._send_json_error(401, "Email ou senha inválidos.")
+        
+        cursor.close()
+        conexao.close()
             
-    # --- FIM DAS NOVAS FUNÇÕES ---
+    # --- FIM DAS FUNÇÕES DE AUTH ---
 
     def do_OPTIONS(self):
         self.send_response(200)
@@ -305,7 +317,6 @@ class MyHandle(SimpleHTTPRequestHandler):
 
         if path == '/listarfilmes':
             search_term = query_params.get('search', [None])[0]
-            # Esta função agora só retorna filmes aprovados
             filmes = listar_filmes_banco(search_term) 
             self.send_response(200)
             self.send_header("Content-type", "application/json; charset=utf-8")
@@ -314,12 +325,26 @@ class MyHandle(SimpleHTTPRequestHandler):
             self.wfile.write(json.dumps(filmes, default=json_converter, ensure_ascii=False).encode('utf-8'))
             return
         
-        # --- NOVO ENDPOINT ---
-        elif path == '/filmespendentes':
-            # Valida se o usuário é admin
+        # --- NOVO ENDPOINT DE CONTAGEM ---
+        elif path == '/pendingcount':
             user_payload = self.validar_token(tipo_requerido='admin')
             if not user_payload:
-                return # Erro já foi enviado por validar_token
+                return 
+
+            count = self.get_pending_count_banco()
+            
+            if count is not None:
+                self.send_response(200)
+                self.send_header("Content-type", "application/json; charset=utf-8")
+                self._send_cors_headers() 
+                self.end_headers()
+                self.wfile.write(json.dumps({'count': count}).encode('utf-8'))
+            return
+        
+        elif path == '/filmespendentes':
+            user_payload = self.validar_token(tipo_requerido='admin')
+            if not user_payload:
+                return
 
             filmes = listar_filmes_pendentes_banco()
             self.send_response(200)
@@ -360,20 +385,18 @@ class MyHandle(SimpleHTTPRequestHandler):
         conexao = None
         cursor = None
 
-        # --- NOVO ENDPOINT DE LOGIN ---
         if path == '/login':
             self.handle_login(data)
             return
         
-        # --- ENDPOINT MODIFICADO ---
         elif path == '/sendcadastro':
-            # REQUER AUTENTICAÇÃO (qualquer tipo)
             user_payload = self.validar_token()
             if not user_payload:
-                return # Erro já foi enviado
+                return
 
             try:
-                titulo = data.get('titulo', "")
+                # --- CORREÇÃO: de 'nome' para 'titulo' ---
+                titulo = data.get('titulo', "") 
                 poster = data.get('poster', "")
                 atores_str = data.get('atores', "")
                 diretor_nome = data.get('diretor', "")
@@ -384,7 +407,6 @@ class MyHandle(SimpleHTTPRequestHandler):
                 produtora_nome = data.get('produtora', "")
                 sinopse = data.get('sinopse', "")
 
-                # MODIFICAÇÃO: Define o status baseado no tipo de usuário
                 status_filme = 'aprovado' if user_payload.get('tipo') == 'admin' else 'pendente'
 
                 ano = int(ano_str) if ano_str.isdigit() else None
@@ -399,12 +421,10 @@ class MyHandle(SimpleHTTPRequestHandler):
                 cursor = conexao.cursor()
                 conexao.start_transaction()
 
-                # MODIFICADO: Adiciona 'status' no INSERT
                 sql_filme = "INSERT INTO Filme (titulo, ano, poster, tempo_de_duracao, orcamento, sinopse, status) VALUES (%s, %s, %s, %s, %s, %s, %s)"
                 cursor.execute(sql_filme, (titulo, ano, poster, tempo_de_duracao, orcamento, sinopse, status_filme))
                 id_filme = cursor.lastrowid
 
-                # ... (resto do código de inserir diretor, ator, etc. continua igual) ...
                 id_diretor = get_or_create_id(cursor, 'Diretor', 'nome', diretor_nome)
                 if id_diretor:
                     cursor.execute("INSERT INTO Filme_diretor (id_filme, id_diretor) VALUES (%s, %s)", (id_filme, id_diretor))
@@ -427,7 +447,6 @@ class MyHandle(SimpleHTTPRequestHandler):
                 
                 conexao.commit()
 
-                # Mensagem de resposta customizada
                 message = 'Filme cadastrado e aprovado com sucesso' if status_filme == 'aprovado' else 'Filme enviado para aprovação'
                 response = {'message': message, 'id': id_filme}
                 self.send_response(201)
@@ -445,12 +464,10 @@ class MyHandle(SimpleHTTPRequestHandler):
             finally:
                 self._close_db(cursor, conexao)
         
-        # --- ENDPOINT MODIFICADO ---
         elif path == '/editarfilme':
-            # REQUER AUTENTICAÇÃO DE ADMIN
             user_payload = self.validar_token(tipo_requerido='admin')
             if not user_payload:
-                return # Erro já foi enviado
+                return
 
             try:
                 filme_id = str(data.get('id', ""))
@@ -458,7 +475,7 @@ class MyHandle(SimpleHTTPRequestHandler):
                     self._send_json_error(400, "Erro: ID do filme ausente ou inválido no JSON.")
                     return
                 
-                # ... (resto do código de /editarfilme continua exatamente o mesmo) ...
+                # --- CORREÇÃO: de 'nome' para 'titulo' ---
                 titulo = data.get('titulo', "")
                 poster = data.get('poster', "")
                 atores_str = data.get('atores', "")
@@ -481,7 +498,6 @@ class MyHandle(SimpleHTTPRequestHandler):
                 cursor = conexao.cursor()
                 conexao.start_transaction()
 
-                # Não mexemos no 'status' ao editar.
                 sql_update_filme = "UPDATE Filme SET titulo=%s, ano=%s, poster=%s, tempo_de_duracao=%s, orcamento=%s, sinopse=%s WHERE id_filme=%s"
                 cursor.execute(sql_update_filme, (titulo, ano, poster, tempo_de_duracao, orcamento, sinopse, filme_id))
 
@@ -524,12 +540,10 @@ class MyHandle(SimpleHTTPRequestHandler):
             finally:
                 self._close_db(cursor, conexao)
 
-        # --- ENDPOINT MODIFICADO ---
         elif path == '/deletarfilme':
-            # REQUER AUTENTICAÇÃO DE ADMIN
             user_payload = self.validar_token(tipo_requerido='admin')
             if not user_payload:
-                return # Erro já foi enviado
+                return
 
             try:
                 filme_id = str(data.get('id', ""))
@@ -537,7 +551,6 @@ class MyHandle(SimpleHTTPRequestHandler):
                     self._send_json_error(400, "ID do filme inválido ou ausente no JSON.")
                     return
 
-                # ... (resto do código de /deletarfilme continua exatamente o mesmo) ...
                 conexao = conectar_banco()
                 cursor = conexao.cursor()
                 conexao.start_transaction()
@@ -568,12 +581,10 @@ class MyHandle(SimpleHTTPRequestHandler):
             finally:
                 self._close_db(cursor, conexao)
         
-        # --- NOVO ENDPOINT DE APROVAÇÃO ---
         elif path == '/aprovarfilme':
-            # REQUER AUTENTICAÇÃO DE ADMIN
             user_payload = self.validar_token(tipo_requerido='admin')
             if not user_payload:
-                return # Erro já foi enviado
+                return
             
             try:
                 filme_id = str(data.get('id_filme', ""))
