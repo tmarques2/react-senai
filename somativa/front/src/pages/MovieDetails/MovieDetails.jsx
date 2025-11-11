@@ -1,10 +1,11 @@
+// src/pages/MovieDetails/MovieDetails.jsx
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import LoadingScreen from '../../components/LoadingScreen/LoadingScreen.jsx';
-import './MovieDetails.css';
-import { useAuth } from '../../context/AuthContext.jsx';
+import './MovieDetails.css'; 
 
-// 1. IMPORTAR O NOVO MODAL
+// 1. IMPORTAR 'user' do useAuth
+import { useAuth } from '../../context/AuthContext.jsx';
 import Modal from '../../components/Modal/Modal.jsx';
 
 function MovieDetailsPage() {
@@ -12,17 +13,16 @@ function MovieDetailsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   
-  // 2. MUDAR O NOME DO ESTADO para ser mais claro
-  const [isModalOpen, setIsModalOpen] = useState(false); // Era 'showModal'
-  
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState(null);
   
   const { id } = useParams(); 
   const navigate = useNavigate(); 
-  const { isAdmin, token } = useAuth();
-  
-  // ... (useEffect de fetchMovie não muda) ...
+
+  // 2. PEGAR 'user', 'isAdmin' e 'token'
+  const { user, isAdmin, token } = useAuth();
+
   useEffect(() => {
     const fetchMovie = async () => {
        try {
@@ -33,7 +33,7 @@ function MovieDetailsPage() {
            throw new Error(`Filme não encontrado (Status: ${response.status})`);
          }
          const data = await response.json();
-         // ... (formatação de dados)
+         // ... (formatação de dados)
          if (data) {
            data.diretores = data.diretores || 'Não informado';
            data.atores = data.atores || 'Não informado';
@@ -53,7 +53,6 @@ function MovieDetailsPage() {
      fetchMovie();
   }, [id]);
 
-  // 3. Atualizar funções para usar o novo estado
   const handleDeleteClick = () => {
     setIsModalOpen(true); 
     setDeleteError(null); 
@@ -66,9 +65,9 @@ function MovieDetailsPage() {
   };
   
   const handleConfirmDelete = async () => {
+    // ... (esta função não muda)
     setIsDeleting(true);
     setDeleteError(null);
-
     try {
       const response = await fetch('http://localhost:8081/deletarfilme', {
         method: 'POST',
@@ -78,17 +77,13 @@ function MovieDetailsPage() {
         },
         body: JSON.stringify({ id: id }), 
       });
-
       if (!response.ok) {
         const errData = await response.json();
         throw new Error(errData.error || 'Falha ao deletar o filme.');
       }
-      
       setIsModalOpen(false);
       navigate('/catalogo'); 
-
     } catch (e) {
-      // 4. Mostrar erro *dentro* do modal
       setDeleteError(e.message);
     } finally {
       setIsDeleting(false);
@@ -101,15 +96,13 @@ function MovieDetailsPage() {
 
   // ... (Renderização de loading, error, !movie) ...
   if (loading) return <LoadingScreen />;
-  if (error) return ( <div>...Erro...</div> );
-  if (!movie) return ( <div>...Não encontrado...</div> );
+  if (error) return ( <div className="movie-details-container" style={{ justifyContent: 'center', textAlign: 'center' }}><h2>Erro: {error}</h2></div> );
+  if (!movie) return ( <div className="movie-details-container" style={{ justifyContent: 'center', textAlign: 'center' }}><h2>Filme não encontrado.</h2></div> );
+
 
   return (
     <>
       <div className="movie-details-container">
-        {/* ... (Todo o seu JSX da página de detalhes) ... */}
-        {/* ... (movie-content, movie-poster-wrapper, movie-info) ... */}
-        {/* ... (sinopse-block, action-buttons, etc) ... */}
          <div className="movie-content">
           <div className="movie-poster-wrapper">
             <img 
@@ -120,6 +113,7 @@ function MovieDetailsPage() {
           </div>
           <div className="movie-info">
             <h1>{movie.titulo} ({movie.ano})</h1>
+            {/* ... (todos os info-item) ... */}
             <div className="info-item"><strong>Gênero:</strong><span>{movie.generos}</span></div>
             <div className="info-item"><strong>Diretor:</strong><span>{movie.diretores}</span></div>
             <div className="info-item"><strong>Elenco:</strong><span>{movie.atores}</span></div>
@@ -130,18 +124,35 @@ function MovieDetailsPage() {
               <h3>Sinopse</h3>
               <p>{movie.sinopse}</p>
             </div>
-            {isAdmin() && (
+            
+            {/* --- 3. LÓGICA DE BOTÕES ATUALIZADA --- */}
+            {/* Mostra botões de ação se o utilizador estiver logado */}
+            {user && (
               <div className="action-buttons">
-                <button onClick={handleEditClick} className="edit-button">Editar</button>
-                <button onClick={handleDeleteClick} className="delete-button">Remover</button>
+                
+                {/* Botão "Editar" (para todos os logados) */}
+                <button onClick={handleEditClick} className="edit-button">
+                  Editar
+                </button>
+
+                {/* Botão "Remover" (APENAS para admin) */}
+                {isAdmin() && (
+                  <button onClick={handleDeleteClick} className="delete-button">
+                    Remover
+                  </button>
+                )}
               </div>
             )}
-            <Link to="/catalogo" className="back-link">Voltar ao Catálogo</Link>
+            {/* --- FIM DA MUDANÇA --- */}
+            
+            <Link to="/catalogo" className="back-link">
+              Voltar ao Catálogo
+            </Link>
           </div>
         </div>
       </div>
 
-      {/* 5. SUBSTITUIR O CÓDIGO DO MODAL ANTIGO PELO NOVO COMPONENTE */}
+      {/* Modal de Confirmação (sem alteração) */}
       <Modal
         isOpen={isModalOpen}
         onClose={handleCancelDelete}
@@ -152,7 +163,6 @@ function MovieDetailsPage() {
         confirmClass="danger" 
       >
         <p>Você tem certeza que deseja remover o filme "{movie?.titulo}"? Esta ação não pode ser desfeita.</p>
-        {/* Mostra o erro de delete dentro do modal */}
         {deleteError && (
           <p style={{ color: '#E50914', marginTop: '1rem', fontWeight: 'bold' }}>
             Erro: {deleteError}

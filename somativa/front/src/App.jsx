@@ -44,14 +44,17 @@ function App() {
             <Route element={<ProtectedRoute />}>
               <Route element={<MainLayout />}>
                 <Route path="/add-movie" element={<AddMoviePage />} />
-                {/* Outras rotas que só logado pode ver, ex: /perfil */}
+                
+                {/* <<< MUDANÇA AQUI >>> */}
+                {/* /editar/:id foi movido de AdminRoute para aqui */}
+                <Route path="/editar/:id" element={<EditMoviePage />} /> 
               </Route>
             </Route>
             
             {/* --- ROTAS ADMIN (SÓ PARA ADMINS LOGADOS) --- */}
             <Route element={<AdminRoute />}>
               <Route element={<MainLayout />}>
-                <Route path="/editar/:id" element={<EditMoviePage />} />
+                {/* /editar/:id foi REMOVIDO daqui */}
                 <Route path="/admin/dashboard" element={<AdminDashboard />} />
               </Route>
             </Route>

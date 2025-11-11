@@ -72,6 +72,8 @@ def get_or_create_id(cursor, table_name, column_name, value):
 # --- FUNÇÕES DE BANCO DE DADOS PRINCIPAIS ---
 
 # Agora só lista filmes APROVADOS
+# No seu server.py, substitua esta função:
+
 def listar_filmes_banco(search_term=None):
     conexao = conectar_banco()
     if not conexao: return []
@@ -107,10 +109,12 @@ def listar_filmes_banco(search_term=None):
             OR generos LIKE %s
             OR produtoras LIKE %s
             OR f.sinopse LIKE %s
+            OR f.ano LIKE %s  -- <<< LINHA ADICIONADA
         """
         like_term = f"%{search_term}%"
-        params = [like_term] * 6
-
+        params = [like_term] * 7 # <<< NÚMERO ATUALIZADO (de 6 para 7)
+    
+    query += " ORDER BY f.id_filme DESC"
     query += ";"
     
     cursor.execute(query, params)
@@ -395,7 +399,6 @@ class MyHandle(SimpleHTTPRequestHandler):
                 return
 
             try:
-                # --- CORREÇÃO: de 'nome' para 'titulo' ---
                 titulo = data.get('titulo', "") 
                 poster = data.get('poster', "")
                 atores_str = data.get('atores', "")
@@ -475,7 +478,6 @@ class MyHandle(SimpleHTTPRequestHandler):
                     self._send_json_error(400, "Erro: ID do filme ausente ou inválido no JSON.")
                     return
                 
-                # --- CORREÇÃO: de 'nome' para 'titulo' ---
                 titulo = data.get('titulo', "")
                 poster = data.get('poster', "")
                 atores_str = data.get('atores', "")

@@ -17,26 +17,14 @@
   gap: 25px;
 }
 
-/* --- ESTILO REMOVIDO ---
-.footer-brand .footer-logo-text {
-  ...
-} 
-*/
-
-/* --- MUDANÇA AQUI --- */
 .footer-logo-img {
-  /* 1. Faz a imagem se comportar como um bloco */
   display: block;
-  /* 2. Adiciona margens automáticas nos lados, forçando a centralização */
   margin-left: auto;
   margin-right: auto;
-
   height: 40px; 
   object-fit: contain; 
   transition: opacity 0.3s ease;
 }
-/* --- FIM DA MUDANÇA --- */
-
 
 .footer-logo-img:hover {
   opacity: 0.8;
@@ -59,33 +47,34 @@
   transform: scale(1.1);
 }
 
-/* Links de Navegação (em colunas) */
+/* --- CSS DOS LINKS MODIFICADO --- */
+/* Removemos o grid, agora é só um container simples */
 .footer-links {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 25px;
-  width: 100%;
-  max-width: 700px;
   text-align: center;
-  margin: 15px 0;
+  margin: 0; /* Removemos a margem que estava antes */
 }
 
-.footer-column {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.footer-column a {
+/* Estilizamos o link "Sobre Nós" diretamente */
+.footer-links a {
   color: #aaa;
   text-decoration: none;
   font-size: 0.9rem;
   transition: color 0.3s ease;
+  font-weight: 200; /* Dando um pouco mais de destaque */
 }
 
-.footer-column a:hover {
+.footer-links a:hover {
   color: #fff;
   text-decoration: underline;
+}
+/* --- FIM DA MODIFICAÇÃO --- */
+
+
+/* Copyright e Logo (Wrapper) */
+.footer-brand {
+    /* Esta classe não tinha estilos, mas podemos garantir 
+       que o copyright e a logo fiquem juntos */
+    text-align: center;
 }
 
 /* Copyright */

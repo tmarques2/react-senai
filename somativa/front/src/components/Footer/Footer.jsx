@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import { FiFacebook, FiInstagram, FiTwitter, FiYoutube } from 'react-icons/fi';
 import './Footer.css';
 
-// 1. Importe a imagem da logo (caminho ajustado)
 import logoImage from '../../assets/images/logo.png'; 
 
 function Footer() {
@@ -13,7 +12,7 @@ function Footer() {
     <footer className="footer-container">
       <div className="footer-content">
         
-        {/* Ícones de Mídia Social */}
+        {/* Ícones de Mídia Social (Mantidos) */}
         <div className="footer-socials">
           <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><FiFacebook size={24} /></a>
           <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><FiInstagram size={24} /></a>
@@ -21,32 +20,21 @@ function Footer() {
           <a href="#" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><FiYoutube size={24} /></a>
         </div>
 
-        {/* Links de Navegação do Footer */}
+        {/* --- ÁREA DE LINKS MODIFICADA --- */}
         <div className="footer-links">
-          <div className="footer-column">
-            <Link to="/sobre-nos">Sobre Nós</Link>
-            <Link to="/">Carreiras</Link>
-          </div>
-          <div className="footer-column">
-            <Link to="/">Termos de Uso</Link>
-            <Link to="/">Privacidade</Link>
-          </div>
-          <div className="footer-column">
-            <Link to="/">Central de Ajuda</Link>
-            <Link to="/">Contato</Link>
-          </div>
+          {/* Removemos as colunas e o link "Contato" */}
+          <Link to="/sobre-nos">Sobre Nós</Link>
         </div>
+        {/* --- FIM DA MODIFICAÇÃO --- */}
 
-        {/* Marca e Copyright */}
-        <div className="footer-brand">
-          
-          {/* 2. Troque o <h3> pela <img> dentro de um Link */}
+        {/* Marca e Copyright (Mantidos) */}
+        <div className="footer-brand"> 
           <Link to="/">
             <img src={logoImage} alt="THAIFLIX Logo" className="footer-logo-img" />
           </Link>
 
           <p className="footer-copyright">
-            © 2025 THAIFLIX, Inc. Projeto fictício para fins de portfólio.
+            © 2025 THAIFLIX, Todos os direitos reservados.
           </p>
         </div>
 
