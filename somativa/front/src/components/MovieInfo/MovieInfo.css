@@ -71,6 +71,7 @@
   border-radius: 5px;
   cursor: pointer;
   transition: all 0.3s ease;
+  font-family: 'Poppins', sans-serif;
 }
 .trailerButton:hover {
   background-color: #f40612;

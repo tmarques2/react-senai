@@ -8,8 +8,6 @@
   overflow: hidden;
 }
 
-/* Em: src/pages/Login/LoginPage.css */
-
 .background-video {
   position: absolute;
   top: 50%;
@@ -21,33 +19,23 @@
   z-index: 0;
   transform: translate(-50%, -50%);
   object-fit: cover;
-  
-  /* --- ADICIONE ESTA LINHA --- */
-  /* Diminui o brilho do vídeo para 40% */
   filter: brightness(70%); 
 }
 
 .login-box-wrapper {
-  /* Overlay escuro para o vídeo de fundo */
   position: relative;
   z-index: 1; 
-
   width: 100%;
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  
-  /* --- MUDE ISTO --- */
-  background-color: transparent; /* Deixa o wrapper transparente */
-  /* --- FIM DA MUDANÇA --- */
-  
+  background-color: transparent;
   padding: 2rem;
   box-sizing: border-box;
 }
 
 .login-box-container {
-  /* O "container" central, permanece igual */
   background-color: rgba(0, 0, 0, 0.85);
   padding: 3rem 4rem;
   border-radius: 8px;
@@ -55,16 +43,16 @@
   max-width: 450px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
   color: #fff;
-  position: relative; /* Garante que esteja acima do wrapper */
-  z-index: 2; /* Garante que fique por cima do overlay */
+  position: relative;
+  z-index: 2;
 }
 
 .login-logo {
   height: 50px;
   width: auto;
   display: block;
-  margin: 0 auto 2rem auto; /* <<< MODIFICADO: Centraliza a imagem */
-  text-align: center; /* <<< ADICIONADO: Para garantir o alinhamento */
+  margin: 0 auto 2rem auto;
+  text-align: center;
 }
 
 .login-box-container h2 {
@@ -73,7 +61,7 @@
   margin-top: 0;
   margin-bottom: 1.8rem;
   text-align: center;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Poppins', sans-serif;
 }
 
 .login-form {
@@ -102,7 +90,7 @@
   border-radius: 4px;
   font-size: 1rem;
   transition: border-color 0.3s, box-shadow 0.3s;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Poppins', sans-serif;
 }
 
 .input-group input:focus {
@@ -122,7 +110,7 @@ background-color: #E50914;
   padding-right: 2.5rem;
   align-self: center;
   width: auto;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Poppins', sans-serif;
   border-radius: 4px;
   font-weight: bold;
   cursor: pointer;

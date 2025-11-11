@@ -39,6 +39,7 @@
 
 .searchInput::placeholder {
   color: #ccc; 
+  font-family: 'Poppins', sans-serif;
 }
 
 /* --- Estilos do Dropdown --- */
