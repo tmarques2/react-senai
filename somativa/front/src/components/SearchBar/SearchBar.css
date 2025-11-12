@@ -3,7 +3,7 @@
 /* Este wrapper é o âncora para o menu flutuante */
 .searchBar-wrapper {
   position: relative;
-  width: 100%;
+  width: 90%;
 }
 
 .searchBar {
@@ -11,7 +11,7 @@
   align-items: center;
   background-color: rgba(255, 255, 255, 0.15); 
   border-radius: 20px;
-  padding: 8px 15px;
+  padding: 8px 10px;
   width: 100%;
   border: 2px solid transparent;
   transition: border-color 0.3s ease, background-color 0.3s ease;

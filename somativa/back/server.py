@@ -29,10 +29,11 @@ def json_converter(o):
 
 def conectar_banco():
     try:
+        # se der erro de authentication usar o comendo pip install --upgrade mysql-connector-python
         return mysql.connector.connect(
             host="localhost",
             user="root",
-            password="root", # ATENÇÃO: Use variáveis de ambiente em produção
+            password="senai", # ATENÇÃO: Use variáveis de ambiente em produção
             database="filminis"
         )
     except mysql.connector.Error as err:

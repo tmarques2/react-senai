@@ -109,7 +109,7 @@ function AddMoviePage() {
               name="titulo" // Corrigido
               value={formData.titulo}
               onChange={handleChange}
-              placeholder="Ex: Um Sonho de Liberdade"
+              placeholder="Ex: Crepúsculo"
               required
             />
           </div>
