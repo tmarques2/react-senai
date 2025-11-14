@@ -33,7 +33,7 @@ def conectar_banco():
         return mysql.connector.connect(
             host="localhost",
             user="root",
-            password="senai", # ATENÇÃO: Use variáveis de ambiente em produção
+            password="root", # ATENÇÃO: Use variáveis de ambiente em produção
             database="filminis"
         )
     except mysql.connector.Error as err:

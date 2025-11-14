@@ -1,86 +1,130 @@
 /* src/components/Footer/Footer.css */
 
 .footer-container {
-  background-color: #0b0a0d; 
-  color: #888;
+  background-color: #0b0a0d; /* Cor original mantida */
+  color: #888;              /* Cor original mantida */
   padding: 40px 40px;
-  border-top: 1px solid #222; 
+  border-top: 1px solid #222; /* Cor original mantida */
   margin-top: 50px; 
 }
 
 .footer-content {
   max-width: 1400px; 
   margin: 0 auto;
+  /* Estilos de layout antigos (flex-direction: column, etc.) removidos */
+}
+
+/* --- ESTILOS PARA O LAYOUT DA FOTO --- */
+
+/* Contêiner principal (colunas de nav + logo) */
+.footer-main {
+  display: flex;
+  justify-content: space-between; /* Coloca nav à esquerda e logo à direita */
+  align-items: flex-start;
+  flex-wrap: wrap; /* Permite quebrar em telas menores */
+  gap: 40px; /* Espaço entre os itens */
+}
+
+/* Agrupador para as colunas de "Links" e "Siga-nos" */
+.footer-nav-cols {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px; /* Espaço entre as colunas "Links" e "Siga-nos" */
+}
+
+/* Estilo para ambas as colunas (Links e Siga-nos) */
+.footer-column {
   display: flex;
   flex-direction: column;
+  gap: 14px; /* Espaço entre os links dentro de uma coluna */
+  min-width: 150px; /* Largura mínima para as colunas */
+}
+
+/* Títulos das colunas (Links: e Siga-nos:) */
+.footer-column h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #eee; /* Cor um pouco mais clara que o texto */
+  margin: 0 0 10px 0;
+  padding-bottom: 5px;
+}
+
+/* Links de texto e links sociais */
+.footer-column a {
+  color: #aaa; /* Cor original mantida */
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.3s ease;
+  
+  /* Novo: para alinhar ícone e texto */
+  display: flex;
   align-items: center;
-  gap: 25px;
+  gap: 8px; /* Espaço entre o ícone e o texto */
+}
+
+.footer-column a:hover {
+  color: #fff; /* Cor original mantida */
+  text-decoration: underline;
+}
+
+/* Logo (no canto) */
+.footer-brand-logo {
+  flex-shrink: 0; /* Impede que a logo encolha */
 }
 
 .footer-logo-img {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  height: 40px; 
-  object-fit: contain; 
+  height: 50px; /* Estilo original mantido */
+  object-fit: contain;
   transition: opacity 0.3s ease;
 }
 
 .footer-logo-img:hover {
-  opacity: 0.8;
+  opacity: 0.8; /* Estilo original mantido */
 }
 
-/* Links de Mídia Social */
-.footer-socials {
-  display: flex;
-  justify-content: center;
-  gap: 25px;
+/* Linha separadora (como na imagem) */
+.footer-separator {
+  width: 100%;
+  height: 1px;
+  background-color: #222; /* Cor da borda original */
+  margin: 30px 0; /* Espaçamento antes e depois */
 }
 
-.footer-socials a {
-  color: #aaa;
-  transition: color 0.3s ease, transform 0.3s ease;
-}
-
-.footer-socials a:hover {
-  color: #fff;
-  transform: scale(1.1);
-}
-
-/* --- CSS DOS LINKS MODIFICADO --- */
-/* Removemos o grid, agora é só um container simples */
-.footer-links {
-  text-align: center;
-  margin: 0; /* Removemos a margem que estava antes */
-}
-
-/* Estilizamos o link "Sobre Nós" diretamente */
-.footer-links a {
-  color: #aaa;
-  text-decoration: none;
-  font-size: 0.9rem;
-  transition: color 0.3s ease;
-  font-weight: 200; /* Dando um pouco mais de destaque */
-}
-
-.footer-links a:hover {
-  color: #fff;
-  text-decoration: underline;
-}
-/* --- FIM DA MODIFICAÇÃO --- */
-
-
-/* Copyright e Logo (Wrapper) */
-.footer-brand {
-    /* Esta classe não tinha estilos, mas podemos garantir 
-       que o copyright e a logo fiquem juntos */
-    text-align: center;
-}
-
-/* Copyright */
-.footer-copyright {
+/* Copyright (embaixo e centralizado) */
+.footer-copyright-bottom {
   font-size: 0.8rem;
-  color: #666;
-  margin-top: 10px;
+  color: #666; /* Cor original mantida */
   text-align: center;
+}
+/* --- FIM DOS NOVOS ESTILOS --- */
+
+
+/* --- ESTILOS ANTIGOS (REMOVIDOS OU SUBSTITUÍDOS) --- */
+/* (Os estilos originais .footer-socials, .footer-links (grid), 
+   .footer-brand, e .footer-copyright foram substituídos 
+   pelas regras acima para criar o novo layout) */
+
+
+/* --- RESPONSIVIDADE --- */
+@media (max-width: 768px) {
+  .footer-main {
+    /* Em telas pequenas, centraliza tudo e empilha */
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .footer-nav-cols {
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+  }
+
+  .footer-column {
+    align-items: center; /* Centraliza links da coluna */
+  }
+
+  .footer-brand-logo {
+    margin-top: 20px; /* Adiciona espaço acima da logo quando empilhada */
+  }
 }
