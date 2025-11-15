@@ -371,14 +371,12 @@ INSERT INTO Filme_pais (id_filme, id_pais) VALUES (31, 1);
 
 -- --- INSERE OS NOVOS USUÁRIOS DE TESTE ---
 -- Senha para ambos é: senha123
--- O hash SHA-256 de "senha123" é:
--- 'a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3'
 
 INSERT INTO Usuario (email, senha_hash, tipo_usuario) 
-VALUES ('admin@filminis.com', '55a5e9e78207b4df8699d60886fa070079463547b095d1a05bc719bb4e6cd251', 'admin');
+VALUES ('thai@filminis.com', '55a5e9e78207b4df8699d60886fa070079463547b095d1a05bc719bb4e6cd251', 'admin');
 
 INSERT INTO Usuario (email, senha_hash, tipo_usuario) 
-VALUES ('user@filminis.com', '55a5e9e78207b4df8699d60886fa070079463547b095d1a05bc719bb4e6cd251', 'comum');
+VALUES ('rebs@filminis.com', '55a5e9e78207b4df8699d60886fa070079463547b095d1a05bc719bb4e6cd251', 'comum');
 -- --- FIM DOS INSERTS DE USUÁRIO ---
 
 

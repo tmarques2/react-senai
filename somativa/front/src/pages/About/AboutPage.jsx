@@ -1,18 +1,9 @@
-// src/pages/About/AboutPage.jsx
 import React, { useState, useEffect } from 'react';
 import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
 import './AboutPage.css';
 
-// Ícones para as vantagens
 import { FiMonitor, FiSmartphone, FiDownload, FiCheckCircle } from 'react-icons/fi';
 
-// Imagem para a primeira seção
-// import cinemaImage from '../../assets/images/seu-cinema.jpg'; // Descomente e adicione uma imagem
-
-// Imagem de fundo para o CTA
-// import ctaBackground from '../../assets/images/seu-cta-bg.jpg'; // Descomente e adicione uma imagem
-
-// NOVO: Componente reutilizável para a lista de vantagens
 const FeatureItem = ({ icon, title, text }) => (
   <div className="feature-item">
     <div className="feature-icon">
