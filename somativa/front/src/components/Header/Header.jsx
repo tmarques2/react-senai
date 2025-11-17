@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { NavLink, Link, useNavigate } from 'react-router-dom';
 import './Header.css';
 
-import SearchBar from '../SearchBar/SearchBar'; 
+import SearchBar from '../SearchBar/SearchBar';
 import { FiHome, FiGrid, FiPlusSquare, FiLogIn, FiLogOut, FiShield, FiBell } from 'react-icons/fi';
 import logoImage from '../../assets/images/logo.png';
 import { useAuth } from '../../context/AuthContext';
@@ -14,8 +14,14 @@ function Header() {
   const { user, isAdmin, logout, pendingCount } = useAuth();
   const navigate = useNavigate();
 
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const notificationRef = useRef(null); // Ref para o dropdown
+  // --- Estados e Refs para os Dropdowns ---
+  const [isNotificationDropdownOpen, setIsNotificationDropdownOpen] = useState(false);
+  const [isAdminDropdownOpen, setIsAdminDropdownOpen] = useState(false);
+  const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false); // NOVO
+  
+  const notificationRef = useRef(null);
+  const adminDropdownRef = useRef(null);
+  const userDropdownRef = useRef(null); // NOVO
 
   useEffect(() => {
     const handleScroll = () => {
@@ -27,31 +33,67 @@ function Header() {
     };
   }, []); 
 
-  // Efeito para fechar o dropdown ao clicar fora
+  // Efeito para fechar os dropdowns ao clicar fora
   useEffect(() => {
     function handleClickOutside(event) {
       if (notificationRef.current && !notificationRef.current.contains(event.target)) {
-        setIsDropdownOpen(false); // Fecha o menu
+        setIsNotificationDropdownOpen(false);
+      }
+      if (adminDropdownRef.current && !adminDropdownRef.current.contains(event.target)) {
+        setIsAdminDropdownOpen(false);
+      }
+      // NOVO: Fecha o dropdown do usuário
+      if (userDropdownRef.current && !userDropdownRef.current.contains(event.target)) {
+        setIsUserDropdownOpen(false);
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [notificationRef]);
+  }, [notificationRef, adminDropdownRef, userDropdownRef]); // ALTERADO
 
   const handleLogout = () => {
     logout();
     navigate('/'); 
   };
 
-  const toggleDropdown = () => {
-    setIsDropdownOpen(prev => !prev);
+  // --- Funções de Toggle dos Dropdowns ---
+  const toggleNotificationDropdown = () => {
+    setIsNotificationDropdownOpen(prev => !prev);
+    setIsAdminDropdownOpen(false);
+    setIsUserDropdownOpen(false); // ALTERADO
+  };
+  
+  const toggleAdminDropdown = () => {
+    setIsAdminDropdownOpen(prev => !prev);
+    setIsNotificationDropdownOpen(false);
+    setIsUserDropdownOpen(false); // ALTERADO
   };
 
+  // NOVO: Toggle para o dropdown do usuário
+  const toggleUserDropdown = () => {
+    setIsUserDropdownOpen(prev => !prev);
+    setIsAdminDropdownOpen(false);
+    setIsNotificationDropdownOpen(false);
+  };
+
+  // Função para o clique no item de notificação (SINO)
   const handleDropdownClick = () => {
-    setIsDropdownOpen(false); // Fecha o menu
-    navigate('/admin/dashboard'); // Navega para o dashboard
+    setIsNotificationDropdownOpen(false);
+    navigate('/admin/dashboard');
+  };
+
+  // Função para o botão Sair do menu Admin
+  const handleAdminLogout = () => {
+    setIsAdminDropdownOpen(false);
+    handleLogout();
+  };
+
+  // NOVO: Função para o botão Sair do menu Usuário
+  const handleUserLogout = () => {
+    setIsUserDropdownOpen(false);
+    handleLogout();
   };
 
   const headerClassName = `headerNav ${isScrolled ? 'scrolled' : ''}`;
@@ -61,11 +103,7 @@ function Header() {
       
       <div className="navLeft">
         <Link to="/"> 
-          <img 
-            src={logoImage} 
-            alt="THAIFLIX Logo" 
-            className="logo" 
-          />
+          <img src={logoImage} alt="THAIFLIX Logo" className="logo" />
         </Link>
       </div>
       
@@ -73,10 +111,10 @@ function Header() {
         <SearchBar />
       </div>
       
-      {/* --- navRight REORDENADO --- */}
+      {/* --- navRight --- */}
       <div className="navRight">
         
-        {/* --- 1. LINKS DE NAVEGAÇÃO --- */}
+        {/* 1. LINKS DE NAVEGAÇÃO (Padrão) */}
         <NavLink 
           to="/" 
           className={({ isActive }) => isActive ? 'navLink active' : 'navLink'}
@@ -93,41 +131,20 @@ function Header() {
           <span>Catálogo</span>
         </NavLink>
         
-        {user && (
-          <NavLink 
-            to="/add-movie"
-            className={({ isActive }) => isActive ? 'navLink active' : 'navLink'}
-          >
-            <FiPlusSquare size={18} />
-            <span>Adicionar Filme</span>
-          </NavLink>
-        )}
-
-        {isAdmin() && (
-          <NavLink 
-            to="/admin/dashboard"
-            className={({ isActive }) => isActive ? 'navLink active adminDashboardLink' : 'navLink adminDashboardLink'}
-          >
-            <FiShield size={18} />
-            <span>Dashboard</span>
-          </NavLink>
-        )}
-        
-        {/* --- 2. BLOCO DE AUTENTICAÇÃO --- */}
-
-        {/* Se o utilizador estiver logado */}
+        {/* 2. BLOCO DE AUTENTICAÇÃO */}
         {user ? (
           <>
-            {/* O Sino (só para Admin) - VEM PRIMEIRO */}
+            {/* O Sino (só para Admin) */}
             {isAdmin() && (
               <div className="notificationContainer" ref={notificationRef}>
-                <button className="notificationBell" onClick={toggleDropdown}>
+                <button className="notificationBell" onClick={toggleNotificationDropdown}>
                   <FiBell size={20} />
                   {pendingCount > 0 && (
                     <span className="notificationBadge">{pendingCount}</span>
                   )}
                 </button>
-                {isDropdownOpen && (
+                {/* LÓGICA DO SINO RESTAURADA (para corrigir o erro) */}
+                {isNotificationDropdownOpen && (
                   <div className="notificationDropdown">
                     {pendingCount > 0 ? (
                       <div className="notificationItem" onMouseDown={handleDropdownClick}>
@@ -143,26 +160,80 @@ function Header() {
               </div>
             )}
 
-            {/* O Indicador (Admin ou Utilizador) - VEM A SEGUIR */}
-            <div className={`userIndicator ${isAdmin() ? 'admin' : 'user'}`}>
-              {isAdmin() ? (
-                <>
+            {/* O Indicador (Admin com dropdown OU Utilizador com dropdown) */}
+            
+            {isAdmin() ? (
+              // Container do Dropdown Admin
+              <div className="adminDropdownContainer" ref={adminDropdownRef}>
+                <button 
+                  className={`userIndicator admin ${isAdminDropdownOpen ? 'active' : ''}`} 
+                  onClick={toggleAdminDropdown}
+                >
                   <FiShield size={18} />
                   <span>Admin</span>
-                </>
-              ) : (
-                <>
+                </button>
+                
+                {isAdminDropdownOpen && (
+                  <div className="adminDropdown">
+                    <NavLink 
+                      to="/add-movie" 
+                      className="adminDropdownLink"
+                      onClick={() => setIsAdminDropdownOpen(false)}
+                    >
+                      <FiPlusSquare size={16} />
+                      <span>Adicionar Filme</span>
+                    </NavLink>
+                    <NavLink 
+                      to="/admin/dashboard" 
+                      className="adminDropdownLink"
+                      onClick={() => setIsAdminDropdownOpen(false)}
+                    >
+                      <FiShield size={16} /> 
+                      <span>Dashboard</span>
+                    </NavLink>
+                    <button 
+                      onClick={handleAdminLogout} 
+                      className="adminDropdownLink adminDropdownLogout"
+                    >
+                      <FiLogOut size={16} />
+                      <span>Sair</span>
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              // Container do Dropdown de Usuário
+              <div className="adminDropdownContainer" ref={userDropdownRef}>
+                <button 
+                  className={`userIndicator user ${isUserDropdownOpen ? 'active' : ''}`}
+                  onClick={toggleUserDropdown}
+                >
                   👤
                   <span>Usuário</span>
-                </>
-              )}
-            </div>
-
-            {/* O botão de Logout - VEM POR ÚLTIMO */}
-            <button onClick={handleLogout} className="logoutButton">
-              <FiLogOut size={18} />
-              <span>Logout</span>
-            </button>
+                </button>
+                
+                {isUserDropdownOpen && (
+                  <div className="adminDropdown">
+                    <NavLink 
+                      to="/add-movie" 
+                      className="adminDropdownLink"
+                      onClick={() => setIsUserDropdownOpen(false)}
+                    >
+                      <FiPlusSquare size={16} />
+                      <span>Adicionar Filme</span>
+                    </NavLink>
+                    
+                    <button 
+                      onClick={handleUserLogout} 
+                      className="adminDropdownLink adminDropdownLogout"
+                    >
+                      <FiLogOut size={16} />
+                      <span>Sair</span>
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
           </>
         ) : (
           /* Se estiver deslogado, mostra apenas o Login */

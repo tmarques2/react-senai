@@ -1,39 +1,69 @@
-// src/components/Footer/Footer.jsx
-
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FiFacebook, FiInstagram, FiTwitter, FiYoutube } from 'react-icons/fi';
+
+// 1. Ícones corretos do react-icons
+import { FiInstagram, FiLinkedin, FiGithub } from 'react-icons/fi'; 
+
+// 2. Importação do seu CSS
 import './Footer.css';
 
+// 3. Importação da sua logo (como solicitado)
 import logoImage from '../../assets/images/logo.png'; 
 
 function Footer() {
   return (
     <footer className="footer-container">
       <div className="footer-content">
-        
-        {/* Ícones de Mídia Social (Mantidos) */}
-        <div className="footer-socials">
-          <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><FiFacebook size={24} /></a>
-          <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><FiInstagram size={24} /></a>
-          <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Twitter"><FiTwitter size={24} /></a>
-          <a href="#" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><FiYoutube size={24} /></a>
+
+        {/* --- ESTRUTURA PRINCIPAL (Layout da Foto) --- */}
+        <div className="footer-main">
+
+          {/* Colunas de Navegação (Links e Siga-nos) */}
+          <div className="footer-nav-cols">
+            
+            {/* Coluna 1: Links (ATUALIZADO) */}
+            <div className="footer-column">
+              <h4>Links:</h4>
+              <Link to="/">Inicio</Link>
+              <Link to="/sobre-nos">Sobre Nós</Link>
+              <Link to="/catalogo">Catalogo</Link>
+            </div>
+
+            {/* Coluna 2: Siga-nos (ATUALIZADO) */}
+            <div className="footer-column footer-social-col">
+              <h4>Siga-nos:</h4>
+              <a href="#" target="_blank" rel="noopener noreferrer">
+                <FiInstagram size={20} />
+                Instagram
+              </a>
+              <a href="#" target="_blank" rel="noopener noreferrer">
+                <FiLinkedin size={20} />
+                Linkedin
+              </a>
+              <a href="#" target="_blank" rel="noopener noreferrer">
+                <FiGithub size={20} />
+                Github
+              </a>
+            </div>
+          </div>
+
+          {/* Logo no canto direito */}
+          <div className="footer-brand-logo">
+            <Link to="/">
+              {/* Imagem da logo importada */}
+              <img src={logoImage} alt="THAIFLIX Logo" className="footer-logo-img" />
+            </Link>
+          </div>
         </div>
 
-        {/* --- ÁREA DE LINKS MODIFICADA --- */}
-        <div className="footer-links">
-          {/* Removemos as colunas e o link "Contato" */}
-          <Link to="/sobre-nos">Sobre Nós</Link>
-        </div>
-        {/* --- FIM DA MODIFICAÇÃO --- */}
+        {/* --- SEPARADOR E COPYRIGHT (Layout da Foto) --- */}
 
-        {/* Marca e Copyright (Mantidos) */}
-        <div className="footer-brand"> 
-          <Link to="/">
-            <img src={logoImage} alt="THAIFLIX Logo" className="footer-logo-img" />
-          </Link>
+        {/* Linha separadora */}
+        <div className="footer-separator"></div>
 
-          <p className="footer-copyright">
+        {/* Copyright centralizado abaixo */}
+        <div className="footer-copyright-bottom">
+          <p>
             © 2025 THAIFLIX, Todos os direitos reservados.
           </p>
         </div>

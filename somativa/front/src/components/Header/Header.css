@@ -1,4 +1,4 @@
-/* src/components/Header/Header.css (Versão Definitiva) */
+/* src/components/Header/Header.css (Versão Definitiva Completa) */
 
 .headerNav {
   display: flex;
@@ -112,6 +112,7 @@
   color: #fff;
 }
 
+/* (Estes estilos .adminDashboardLink não são mais usados, mas não há problema em mantê-los) */
 .adminDashboardLink {
   color: #f0ad4e !important;
 }
@@ -157,11 +158,8 @@
   background-color: #777;
 }
 
-/* ... (todo o seu CSS existente fica aqui em cima) ... */
+/* --- ESTILOS DO SINO DE NOTIFICAÇÃO --- */
 
-/* --- ESTILOS DO SINO DE NOTIFICAÇÃO (ATUALIZADOS) --- */
-
-/* Mudar .notificationBell de NavLink para um <button> */
 .notificationBell {
   position: relative; 
   display: flex;
@@ -202,37 +200,33 @@
   border: 2px solid #0b0a0d; 
 }
 
-/* --- NOVOS ESTILOS PARA O DROPDOWN --- */
+/* --- ESTILOS DO DROPDOWN DE NOTIFICAÇÃO --- */
 
-/* Este container segura o sino e o dropdown */
 .notificationContainer {
-  position: relative; /* Este é o âncora para o dropdown */
+  position: relative; 
   display: flex;
   align-items: center;
 }
 
-/* O menu dropdown em si */
 .notificationDropdown {
   position: absolute;
-  top: 100%; /* Posiciona abaixo do sino */
-  right: 0; /* Alinha à direita */
-  margin-top: 15px; /* Espaço do sino */
+  top: 100%; 
+  right: 0; 
+  margin-top: 15px; 
   
   background-color: #1a1a1a;
   border: 1px solid #333;
   border-radius: 8px;
-  width: 280px; /* Largura do menu */
+  width: 280px; 
   
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-  z-index: 1100; /* Tem que estar acima de todo o resto */
+  z-index: 1100; 
   
-  /* Animação de fade-in */
   opacity: 0;
   transform: translateY(-10px);
   animation: fadeIn 0.2s ease forwards;
 }
 
-/* O item clicável dentro do menu */
 .notificationItem {
   padding: 1rem;
   color: #e5e5e5;
@@ -246,7 +240,6 @@
   background-color: #333;
 }
 
-/* Estilo para quando não há notificações */
 .notificationItem.no-pending {
   color: #888;
   cursor: default;
@@ -266,4 +259,119 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* --- NOVOS ESTILOS PARA O DROPDOWN DE ADMIN --- */
+
+/* 1. O container (âncora) - (A CORREÇÃO DO ALINHAMENTO) */
+.adminDropdownContainer {
+  position: relative; /* <-- Essencial para ancorar o menu */
+  display: flex;
+  align-items: center;
+}
+
+/* 2. O botão (reaproveitando .userIndicator) */
+.userIndicator.admin {
+  border: none;
+  font-family: inherit; 
+  
+  background-color: #E50914;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.userIndicator.admin:hover,
+.userIndicator.admin.active {
+  background-color: #B00710; /* Vermelho mais escuro */
+}
+
+/* 3. O menu dropdown */
+.adminDropdown {
+  position: absolute; /* <-- Essencial para flutuar */
+  top: 100%; 
+  right: 0; 
+  margin-top: 15px; 
+  
+  background-color: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 8px;
+  width: 220px; 
+  
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  z-index: 1100; 
+  
+  animation: fadeIn 0.2s ease forwards;
+  
+  display: flex;
+  flex-direction: column;
+  padding: 8px; 
+  gap: 4px; 
+}
+
+/* 4. Os links (e botões) dentro do dropdown - (A CORREÇÃO DO BOTÃO BRANCO) */
+.adminDropdownLink {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  text-decoration: none;
+  color: #e5e5e5;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+
+  /* Resets para <button> */
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 100%; 
+  text-align: left; 
+  font-family: inherit; 
+  box-sizing: border-box; /* <-- ADICIONE ESTA LINHA */
+}
+
+.adminDropdownLink:hover {
+  background-color: #333;
+  color: #fff;
+}
+
+/* Estilo do NavLink ativo dentro do dropdown */
+.adminDropdownLink.active {
+  background-color: #444; 
+  color: #fff;
+}
+
+/* Não queremos o sublinhado '::after' dentro do dropdown */
+.adminDropdownLink.active::after {
+  display: none; 
+}
+
+/* Estilo específico para o botão "Sair" no dropdown */
+.adminDropdownLink.adminDropdownLogout {
+  color: #ffaaaa; /* Um tom de vermelho claro para "Sair" */
+}
+
+.adminDropdownLink.adminDropdownLogout:hover {
+  color: #ffc9c9; 
+  background-color: #333; 
+}
+
+.userIndicator.user {
+  /* Resets para transformar o <div> (ou <button>) em botão */
+  border: none;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  
+  /* Cor de fundo padrão (que já deve ter) */
+  background-color: #333;
+  color: #fff;
+}
+
+/* Estado de hover ou ativo (menu aberto) */
+.userIndicator.user:hover,
+.userIndicator.user.active {
+  background-color: #555; /* Um cinza um pouco mais escuro */
 }

@@ -5,7 +5,7 @@ import LoadingScreen from '../../components/LoadingScreen/LoadingScreen.jsx';
 import { useAuth } from '../../context/AuthContext';
 
 const initialState = {
-  titulo: '', // Corrigido de 'nome' para 'titulo'
+  titulo: '',
   poster: '',
   atores: '',
   diretor: '',
