@@ -1,10 +1,13 @@
 import "./Card.css";
 
+// Props desestruturadas para facilitar o uso
 function Card({ nome, descricao, preco, imagem, onFavoritar, isFavorito }) {
     return (
+        // Uso de tag semântica <article> para acessibilidade
         <article className={`card ${isFavorito ? "selecionado" : ""}`}>
             <figure className="cardFigura">
-                <img src={imagem} alt={nome} className="cardImagem" />
+                {/* Alt dinâmico para acessibilidade visual */}
+                <img src={imagem} alt={`Foto de um ${nome}`} className="cardImagem" />
             </figure>
 
             <section className="cardInfos">
@@ -16,10 +19,11 @@ function Card({ nome, descricao, preco, imagem, onFavoritar, isFavorito }) {
 
                 <footer>
                     <span className="cardPreco">R$ {preco}</span>
-                    {/* Aqui mudamos a classe do botão também se quiser */}
+                    {/* Botão que altera o estado global via props */}
                     <button 
                         className={`btnFavoritar ${isFavorito ? "ativo" : ""}`} 
                         onClick={onFavoritar}
+                        aria-pressed={isFavorito} // Melhora a acessibilidade para leitores de tela
                     >
                         {isFavorito ? "🤍 Favoritado" : "❤️ Favoritar"}
                     </button>

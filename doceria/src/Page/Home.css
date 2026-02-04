@@ -1,5 +1,7 @@
 .home {
     padding: 10px 0;
+    min-height: 100vh;
+    background-color: var(--bgColor);
 }
 
 .homeHeader {
@@ -27,7 +29,7 @@
     grid-template-columns: repeat(4, 1fr);
     gap: 25px;
     justify-items: center;
-    max-width: 1200px;
+    max-width: 1500px;
     margin: 0 auto;
 }
 
@@ -40,6 +42,88 @@
     padding: 10px 20px;
     border-radius: 50px;
     font-weight: bold;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     z-index: 1000;
+}
+
+/* ===============================
+   Variáveis de cores (acessível)
+================================*/
+
+.home {
+    --bgColor: #ffffff;
+    --textColor: #1f1f1f;
+    --titleColor: #222222;
+    --cardBg: #ffffff;
+    --cardText: #222222;
+    --mutedText: #555555;
+    --primaryColor: #dd5482;
+    --focusColor: #000000;
+
+    background-color: var(--bgColor);
+    color: var(--textColor);
+    min-height: 100vh;
+}
+
+/* ===============================
+   Tema escuro
+================================*/
+
+.home.darkMode {
+    --bgColor: #121212;
+    --textColor: #f2f2f2;
+    --titleColor: #ffffff;
+    --cardBg: #5a2535;
+    --cardText: #f5f5f5;
+    --mutedText: #cfcfcf;
+    --primaryColor: #ff7fa8;
+    --focusColor: #ffffff;
+}
+
+/* ===============================
+   Ajustes usando as variáveis
+================================*/
+
+.homeHeader h1 {
+    color: var(--titleColor);
+}
+
+.cardsContainer {
+    color: var(--textColor);
+}
+
+/* topo */
+
+.controlesTopo {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    display: flex;
+    gap: 12px;
+    z-index: 1000;
+}
+
+.contadorFavoritos {
+    background-color: var(--primaryColor);
+    color: #ffffff;
+}
+
+/* botão de tema */
+
+.btnTema {
+    background-color: transparent;
+    border: 2px solid var(--primaryColor);
+    color: var(--textColor);
+    padding: 8px 14px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+/* foco acessível */
+
+.btnTema:focus-visible {
+    outline: 3px solid var(--focusColor);
+    outline-offset: 3px;
 }

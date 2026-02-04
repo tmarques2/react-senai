@@ -1,27 +1,68 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Card from "../Components/Card";
 import "./Home.css";
 import logoBugatti from "../assets/Logo.png";
 
 function Home() {
-    const [favoritos, setFavoritos] = useState([]);
+    // LocalStorage
+    const [favoritos, setFavoritos] = useState(() => {
+        const salvos = localStorage.getItem("favoritos_doceria");
+        return salvos ? JSON.parse(salvos) : [];
+    });
 
+    // Tema
+    const [temaEscuro, setTemaEscuro] = useState(() => {
+        return localStorage.getItem("tema_doceria") === "escuro";
+    });
+
+    // Lista de itens do catalogo
+    const listaDoces = [
+        { id: 1, nome: "Brigadeiro", preco: "3,50", descricao: "Clássico doce brasileiro feito com chocolate e granulado.", imagem: "https://comidinhasdochef.com/wp-content/uploads/2024/12/brigadeiro_com_barra_de_chocolate_085071d8.webp" },
+        { id: 2, nome: "Bolo de Chocolate", preco: "10,00", descricao: "Recheio de brigadeiro e cobertura de ganache de chocolate", imagem: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnycCR2v2q_LyBLVEip1JNbTfWggPbeMRRFQ&s" },
+        { id: 3, nome: "Cupcake", preco: "6,00", descricao: "Massa fofinha com cobertura cremosa e decorada.", imagem: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTD_dKs70fidLjTIgraGs2yvUZ2ZWiimpb67w&s" },
+        { id: 4, nome: "Donut", preco: "7,00", descricao: "Rosquinha macia com cobertura doce e confeitos.", imagem: "https://i1.pickpik.com/photos/205/915/768/cute-sweet-tasty-delicious-preview.jpg" },
+        { id: 5, nome: "Brownie com sorvete", preco: "12,00", descricao: "Brownie de chocolate finalizado com uma bola de sorvete de creme por cima.", imagem: "https://images.pexels.com/photos/29177177/pexels-photo-29177177/free-photo-of-delicioso-brownie-de-chocolate-com-sorvete.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" },
+        { id: 6, nome: "Croissant", preco: "15,00", descricao: "Massa folheada com recheio de morango e nutella.", imagem: "https://fillmorebr.com/wp-content/uploads/2023/11/Croissant-com-Nutella.jpg" },
+        { id: 7, nome: "Torta de Maracujá", preco: "15,00", descricao: "Base crocante de biscoito, recheio de mousse de maracujá.", imagem: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRx320HSYGrAsK8_r63e_5-slYdkyGBcqv8fg&s" },
+        { id: 8, nome: "Macaron", preco: "9,00", descricao: "Doce francês delicado com recheio cremoso.", imagem: "https://guiadacozinha.com.br/wp-content/uploads/2021/08/macaron.jpg" },
+    ];
+
+    // salva favoritos no localstorage
+    useEffect(() => {
+        localStorage.setItem("favoritos_doceria", JSON.stringify(favoritos));
+    }, [favoritos]);
+
+    // salva o tema da pagina no localstorage
+    useEffect(() => {
+        localStorage.setItem("tema_doceria", temaEscuro ? "escuro" : "claro");
+    }, [temaEscuro]);
+
+    // Função para adicionar ou remover dos favoritos (altera o estado)
     const alternarFavorito = (nomeProduto) => {
-        setFavoritos((prevFavoritos) => {
-            if (prevFavoritos.includes(nomeProduto)) {
-                return prevFavoritos.filter(item => item !== nomeProduto);
-            }
-            else {
-                return [...prevFavoritos, nomeProduto];
-            }
-        });
+        setFavoritos((prev) =>
+            prev.includes(nomeProduto)
+                ? prev.filter(item => item !== nomeProduto)
+                : [...prev, nomeProduto]
+        );
     };
 
     return (
-        <main className="home">
-            <span className="contadorFavoritos">
-                🤍 Favoritos: <strong>{favoritos.length}</strong>
-            </span>
+        <main className={`home ${temaEscuro ? "darkMode" : ""}`}>
+            <aside className="controlesTopo" aria-label="Controles da pagina">
+                {/* Contador global de favoritos */}
+                <span className="contadorFavoritos" role="status" aria-live="polite">
+                    🤍 Favoritos: <strong>{favoritos.length}</strong>
+                </span>
+
+                <button 
+                className="btnTema"
+                onClick={() => setTemaEscuro(!temaEscuro)}
+                aria-label={temaEscuro ? "Mudar para modo claro" : "Mudar para modo escuro"}
+                aria-pressed={temaEscuro}
+                >
+                    {temaEscuro ? "☀️ Modo Claro" : "🌙Modo Escuro"}
+                </button>
+            </aside>
 
             <header className="homeHeader">
                 <img src={logoBugatti} alt="Logo Doceria Bugatti" className="logoImage" />
@@ -29,77 +70,18 @@ function Home() {
             </header>
 
             <section className="cardsContainer">
-                <Card
-                    nome="Brigadeiro"
-                    descricao="Clássico doce brasileiro feito com chocolate e granulado."
-                    preco="3,50"
-                    imagem="https://comidinhasdochef.com/wp-content/uploads/2024/12/brigadeiro_com_barra_de_chocolate_085071d8.webp"
-                    isFavorito={favoritos.includes("Brigadeiro")}
-                    onFavoritar={() => alternarFavorito("Brigadeiro")}
-                />
-
-                <Card
-                    nome="Bolo de Chocolate"
-                    descricao="Massa sabor chocolate com recheio de brigadeiro e cobertura de ganache de chocolate"
-                    preco="10,00"
-                    imagem="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnycCR2v2q_LyBLVEip1JNbTfWggPbeMRRFQ&s"
-                    isFavorito={favoritos.includes("Bolo de Chocolate")}
-                    onFavoritar={() => alternarFavorito("Bolo de Chocolate")}
-                />
-
-                <Card
-                    nome="Cupcake"
-                    descricao="Massa fofinha com cobertura cremosa e decorada."
-                    preco="6,00"
-                    imagem="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTD_dKs70fidLjTIgraGs2yvUZ2ZWiimpb67w&s"
-                    isFavorito={favoritos.includes("Cupcake")}
-                    onFavoritar={() => alternarFavorito("Cupcake")}
-                />
-
-                <Card
-                    nome="Donut"
-                    descricao="Rosquinha macia com cobertura doce e confeitos."
-                    preco="7,00"
-                    imagem="https://i1.pickpik.com/photos/205/915/768/cute-sweet-tasty-delicious-preview.jpg"
-                    isFavorito={favoritos.includes("Donut")}
-                    onFavoritar={() => alternarFavorito("Donut")}
-                />
-
-                <Card
-                    nome="Brownie com sorvete"
-                    descricao="Brownie de chocolate finalizado com uma bola de sorvete de creme por cima."
-                    preco="12,00"
-                    imagem="https://images.pexels.com/photos/29177177/pexels-photo-29177177/free-photo-of-delicioso-brownie-de-chocolate-com-sorvete.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-                    isFavorito={favoritos.includes("Brownie com sorvete")}
-                    onFavoritar={() => alternarFavorito("Brownie com sorvete")}
-                />
-
-                <Card
-                    nome="Croissant"
-                    descricao="Massa folheada com recheio de morango e nutella."
-                    preco="15,00"
-                    imagem="https://fillmorebr.com/wp-content/uploads/2023/11/Croissant-com-Nutella.jpg"
-                    isFavorito={favoritos.includes("Croissant")}
-                    onFavoritar={() => alternarFavorito("Croissant")}
-                />
-
-                <Card
-                    nome="Torta de Maracujá"
-                    descricao="Base crocante de biscoito, recheio de mousse de maracujá e cobertura de geleia de maracujá."
-                    preco="15,00"
-                    imagem="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRx320HSYGrAsK8_r63e_5-slYdkyGBcqv8fg&s"
-                    isFavorito={favoritos.includes("Torta de Maracujá")}
-                    onFavoritar={() => alternarFavorito("Torta de Maracujá")}
-                />
-
-                <Card
-                    nome="Macaron"
-                    descricao="Doce francês delicado com recheio cremoso."
-                    preco="9,00"
-                    imagem="https://guiadacozinha.com.br/wp-content/uploads/2021/08/macaron.jpg"
-                    isFavorito={favoritos.includes("Macaron")}
-                    onFavoritar={() => alternarFavorito("Macaron")}
-                />
+                {/* Uso do .map() para renderizar a lista */}
+                {listaDoces.map((doce) => (
+                    <Card
+                        key={doce.id} // Chave única para o React
+                        nome={doce.nome}
+                        descricao={doce.descricao}
+                        preco={doce.preco}
+                        imagem={doce.imagem}
+                        isFavorito={favoritos.includes(doce.nome)}
+                        onFavoritar={() => alternarFavorito(doce.nome)}
+                    />
+                ))}
             </section>
         </main>
     );
