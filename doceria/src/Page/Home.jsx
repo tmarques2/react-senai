@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import Card from "../Components/Card";
 import "./Home.css";
-import logoBugatti from "../assets/Logo.png";
+import logoClaro from "../assets/LogoClaro.png";
+import logoEscuro from "../assets/LogoEscuro.png";
 
 function Home() {
     // LocalStorage
@@ -54,20 +55,25 @@ function Home() {
                     🤍 Favoritos: <strong>{favoritos.length}</strong>
                 </span>
 
-                <button 
-                className="btnTema"
-                onClick={() => setTemaEscuro(!temaEscuro)}
-                aria-label={temaEscuro ? "Mudar para modo claro" : "Mudar para modo escuro"}
-                aria-pressed={temaEscuro}
+                <button
+                    className="btnTema"
+                    onClick={() => setTemaEscuro(!temaEscuro)}
+                    aria-label={temaEscuro ? "Mudar para modo claro" : "Mudar para modo escuro"}
+                    aria-pressed={temaEscuro}
                 >
                     {temaEscuro ? "☀️ Modo Claro" : "🌙Modo Escuro"}
                 </button>
             </aside>
 
             <header className="homeHeader">
-                <img src={logoBugatti} alt="Logo Doceria Bugatti" className="logoImage" />
+                <img
+                    src={temaEscuro ? logoEscuro : logoClaro}
+                    alt="Logo Doceria Bugatti"
+                    className="logoImage"
+                />
                 <h1>Bem-Vindo à Doceria Bugatti's</h1>
             </header>
+
 
             <section className="cardsContainer">
                 {/* Uso do .map() para renderizar a lista */}
