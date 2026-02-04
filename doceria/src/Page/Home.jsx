@@ -16,6 +16,9 @@ function Home() {
         return localStorage.getItem("tema_doceria") === "escuro";
     });
 
+    // Novo Estado para a Busca
+    const [busca, setBusca] = useState("");
+
     // Lista de itens do catalogo
     const listaDoces = [
         { id: 1, nome: "Brigadeiro", preco: "3,50", descricao: "Clássico doce brasileiro feito com chocolate e granulado.", imagem: "https://comidinhasdochef.com/wp-content/uploads/2024/12/brigadeiro_com_barra_de_chocolate_085071d8.webp" },
@@ -28,17 +31,21 @@ function Home() {
         { id: 8, nome: "Macaron", preco: "9,00", descricao: "Doce francês delicado com recheio cremoso.", imagem: "https://guiadacozinha.com.br/wp-content/uploads/2021/08/macaron.jpg" },
     ];
 
-    // salva favoritos no localstorage
+    // Lógica de Filtro (Case Insensitive)
+    const docesFiltrados = listaDoces.filter((doce) =>
+        doce.nome.toLowerCase().includes(busca.toLowerCase())
+    );
+
+    // Salva favoritos
     useEffect(() => {
         localStorage.setItem("favoritos_doceria", JSON.stringify(favoritos));
     }, [favoritos]);
 
-    // salva o tema da pagina no localstorage
+    // Salva tema
     useEffect(() => {
         localStorage.setItem("tema_doceria", temaEscuro ? "escuro" : "claro");
     }, [temaEscuro]);
 
-    // Função para adicionar ou remover dos favoritos (altera o estado)
     const alternarFavorito = (nomeProduto) => {
         setFavoritos((prev) =>
             prev.includes(nomeProduto)
@@ -50,7 +57,6 @@ function Home() {
     return (
         <main className={`home ${temaEscuro ? "darkMode" : ""}`}>
             <aside className="controlesTopo" aria-label="Controles da pagina">
-                {/* Contador global de favoritos */}
                 <span className="contadorFavoritos" role="status" aria-live="polite">
                     🤍 Favoritos: <strong>{favoritos.length}</strong>
                 </span>
@@ -61,7 +67,7 @@ function Home() {
                     aria-label={temaEscuro ? "Mudar para modo claro" : "Mudar para modo escuro"}
                     aria-pressed={temaEscuro}
                 >
-                    {temaEscuro ? "☀️ Modo Claro" : "🌙Modo Escuro"}
+                    {temaEscuro ? "☀️ Modo Claro" : "🌙 Modo Escuro"}
                 </button>
             </aside>
 
@@ -72,22 +78,40 @@ function Home() {
                     className="logoImage"
                 />
                 <h1>Bem-Vindo à Doceria Bugatti's</h1>
+
+                {/* Barra de Pesquisa Semântica */}
+                <div className="searchContainer">
+                    <input
+                        type="search"
+                        className="searchInput"
+                        placeholder="O que você procura hoje?"
+                        value={busca}
+                        onChange={(e) => setBusca(e.target.value)}
+                        aria-label="Pesquisar doces por nome"
+                    />
+                </div>
             </header>
 
-
-            <section className="cardsContainer">
-                {/* Uso do .map() para renderizar a lista */}
-                {listaDoces.map((doce) => (
-                    <Card
-                        key={doce.id} // Chave única para o React
-                        nome={doce.nome}
-                        descricao={doce.descricao}
-                        preco={doce.preco}
-                        imagem={doce.imagem}
-                        isFavorito={favoritos.includes(doce.nome)}
-                        onFavoritar={() => alternarFavorito(doce.nome)}
-                    />
-                ))}
+            <section className="cardsContainer" aria-label="Lista de produtos">
+                {/* Verifica se há itens na lista filtrada */}
+                {docesFiltrados.length > 0 ? (
+                    docesFiltrados.map((doce) => (
+                        <Card
+                            key={doce.id}
+                            nome={doce.nome}
+                            descricao={doce.descricao}
+                            preco={doce.preco}
+                            imagem={doce.imagem}
+                            isFavorito={favoritos.includes(doce.nome)}
+                            onFavoritar={() => alternarFavorito(doce.nome)}
+                        />
+                    ))
+                ) : (
+                    // Feedback visual e semântico para busca vazia
+                    <p className="mensagemVazio" role="alert">
+                        Nenhum doce encontrado com o nome "{busca}". 🍩
+                    </p>
+                )}
             </section>
         </main>
     );
